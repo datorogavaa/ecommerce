@@ -3,6 +3,7 @@ package com.ecommerce.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,12 +28,11 @@ public class User {
     @NotEmpty
     private String password;
 
-    @OneToMany(mappedBy = "user")
-    private List<Order> orders;
-
     @NotEmpty
     private String address;
 
 
-    
+    @OneToMany(mappedBy = "user")
+    private List<Order> orders;
+
 }
