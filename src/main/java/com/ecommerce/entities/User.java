@@ -12,6 +12,7 @@ import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
 public class User {
     @Id
@@ -34,5 +35,7 @@ public class User {
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
+
+    private String role;
 
 }

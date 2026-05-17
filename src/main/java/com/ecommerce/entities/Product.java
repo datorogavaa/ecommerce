@@ -3,13 +3,17 @@ package com.ecommerce.entities;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.util.List;
+
 @Entity
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 public class Product {
 
     @Id
@@ -25,5 +29,13 @@ public class Product {
 
     @NonNull
     private Double price;
+
+    @NotEmpty(message = "Product category cannot be empty")
+    private String category;
+
+    @NotEmpty(message = "Product image URL cannot be empty")
+    private List<String> imageUrl;
+
+    private Long quantity;
 
 }

@@ -9,20 +9,19 @@ import java.util.List;
 
 @Entity
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "orders")
-public class Order {
+@NoArgsConstructor
+public class Basket {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "order_id")
+    @JoinColumn(name = "basket_id")
     private Long id;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id")
+    @OneToOne
     private User user;
 
-    @OneToMany(mappedBy = "order")
-    private List<OrderItem> orderItems;
+    @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL , orphanRemoval = true)
+    private List<OrderItem> orderItemList;
 
 }

@@ -1,8 +1,11 @@
 package com.ecommerce.services;
 
 import com.ecommerce.entities.Order;
+import com.ecommerce.entities.OrderItem;
 import com.ecommerce.repositories.OrderRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 public class OrderService {
@@ -19,9 +22,7 @@ public class OrderService {
         return orderRepository.findById(id).orElse(null);
     }
 
-    public void updateOrder(Order order) {
-        orderRepository.save(order);
-    }
+
 
     public void deleteOrder(Long id) {
         orderRepository.deleteById(id);
