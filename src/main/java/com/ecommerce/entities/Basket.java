@@ -15,13 +15,13 @@ public class Basket {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @JoinColumn(name = "basket_id")
+    @Column(name = "basket_id")
     private Long id;
 
     @OneToOne
     private User user;
 
-    @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL , orphanRemoval = true)
-    private List<OrderItem> orderItemList;
+    @OneToMany(mappedBy = "basket", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<BasketItem> basketItemList;
 
 }

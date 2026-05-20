@@ -1,8 +1,8 @@
 package com.ecommerce.restControllers;
 
-import com.ecommerce.repositories.BasketRepository;
+import com.ecommerce.entities.BasketItem;
 import com.ecommerce.services.BasketService;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 public class BasketRestController {
@@ -11,5 +11,15 @@ public class BasketRestController {
         this.basketService = basketService;
     }
 
+
+    @PatchMapping("/addToBasket/{basketId}")
+    public void addToBasket(@PathVariable Long basketId, @RequestBody BasketItem basketItem) {
+        basketService.addProductToBasket(basketId, basketItem);
+    }
+
+    @PatchMapping("removeFromBasket/{basketId}")
+    public void removeFromBasket(@PathVariable Long basketId, @RequestBody Long productId) {
+        basketService.removeProductFromBasket(basketId, productId);
+    }
 
 }

@@ -1,13 +1,9 @@
 package com.ecommerce.restControllers;
 
 import com.ecommerce.entities.Order;
-import com.ecommerce.entities.OrderItem;
 import com.ecommerce.services.OrderService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import java.util.List;
-
-import static org.springframework.http.ResponseEntity.ok;
 
 @RestController
 public class OrderRestController {
