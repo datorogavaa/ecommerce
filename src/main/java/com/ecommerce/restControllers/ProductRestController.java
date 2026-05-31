@@ -4,6 +4,7 @@ package com.ecommerce.restControllers;
 import com.ecommerce.dto.ProductDto;
 import com.ecommerce.entities.Product;
 import com.ecommerce.services.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -20,7 +21,7 @@ public class ProductRestController {
     }
 
     @PostMapping("addProduct")
-    public ResponseEntity<String> addProduct(@RequestBody ProductDto productDto) {
+    public ResponseEntity<String> addProduct(@Valid @RequestBody ProductDto productDto) {
         productService.addProduct(productDto);
         return ResponseEntity.ok("Product added successfully");
     }
@@ -37,13 +38,13 @@ public class ProductRestController {
 
 
     @PutMapping("/updateProduct/{id}")
-    public ResponseEntity<String> updateProduct(@PathVariable Long id, @RequestBody ProductDto productDto) {
+    public ResponseEntity<String> updateProduct(@PathVariable Long id,@Valid @RequestBody ProductDto productDto) {
         productService.updateProduct(id, productDto);
         return ResponseEntity.ok("Product updated successfully");
     }
 
     @PatchMapping("/updateProductField/{id}")
-    public ResponseEntity<String> updateProductField(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<String> updateProductField(@PathVariable Long id, @Valid @RequestBody Map<String, Object> updates) {
         productService.updateProductField(id, updates);
         return ResponseEntity.ok("Product field updated successfully");
     }

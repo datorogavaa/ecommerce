@@ -20,18 +20,13 @@ public class User {
     @Column(name = "user_id")
     private Long id;
 
-    @NotEmpty(message = "Username cannot be empty")
     private String username;
 
-    @Email(message = "Email should be valid")
     private String email;
 
-    @NotEmpty
     private String password;
 
-    @NotEmpty
     private String address;
-
 
     @OneToMany(mappedBy = "user")
     private List<Order> orders;

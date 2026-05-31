@@ -5,7 +5,6 @@ import com.ecommerce.entities.User;
 import com.ecommerce.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -40,7 +39,7 @@ public class UserService {
 
     public void updateUser( Long id,UserDto userDto) {
         logger.info("Updating user with id: " + id);
-        User user = userRepository.findById(id).orElse(null);
+        User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found with id: " + id));
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
         user.setPassword(userDto.getPassword());

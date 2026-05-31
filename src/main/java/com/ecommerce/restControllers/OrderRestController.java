@@ -2,6 +2,7 @@ package com.ecommerce.restControllers;
 
 import com.ecommerce.entities.Order;
 import com.ecommerce.services.OrderService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,7 +15,7 @@ public class OrderRestController {
         }
 
         @PostMapping("/addOrder")
-        public ResponseEntity<String> addOrder(@RequestBody Order order) {
+        public ResponseEntity<String> addOrder( @Valid @RequestBody Order order) {
             orderService.addOrder(order);
             return ResponseEntity.status(201).body("Order created successfully");
         }
@@ -28,7 +29,7 @@ public class OrderRestController {
         @DeleteMapping("/deleteOrder/{id}")
         public ResponseEntity<String> deleteOrder(@PathVariable Long id) {
             orderService.deleteOrder(id);
-            return ResponseEntity.status(204).body("Order deleted successfully");
+            return ResponseEntity.status(200).body("Order deleted successfully");
         }
 
 }

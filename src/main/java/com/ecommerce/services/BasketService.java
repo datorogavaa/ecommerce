@@ -62,11 +62,28 @@ public class BasketService {
 
     @Transactional
     public void removeProductFromBasket(Long basketId, Long productId) {
+
         Basket basket = getBasketById(basketId);
 
-        if (basket.getBasketItemList() != null) {
-            basket.getBasketItemList().removeIf(item -> item.getProduct().getId().equals(productId));
-            basketRepository.save(basket);
+        if (basket.getBasketItemList() == null) {
+            return;
         }
+
+        basket.getBasketItemList().removeIf(item -> {
+            if (item.getProduct().getId().equals(productId)) {
+
+                int newQty = item.getQuantity() - 1;
+
+                if (newQty > 0) {
+                    item.setQuantity(newQty);
+                    return false;
+                } else {
+                    return true;
+                }
+            }
+            return false;
+        });
+
+        basketRepository.save(basket);
     }
 }

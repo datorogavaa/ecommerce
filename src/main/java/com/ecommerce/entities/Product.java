@@ -21,21 +21,11 @@ public class Product {
     @Column(name = "product_id")
     private Long id;
 
-    @NotEmpty(message = "Product name cannot be empty")
     private String name;
-
-    @NotEmpty(message = "Product description cannot be empty")
     private String description;
-
-    @NonNull
     private Double price;
-
-    @NotEmpty(message = "Product category cannot be empty")
     private String category;
-
-    @NotEmpty(message = "Product image URL cannot be empty")
     private List<String> imageUrl;
-
     private Long quantity;
 
 }

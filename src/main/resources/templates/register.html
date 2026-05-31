@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Create Account — TechForge</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+
+<div class="auth-page">
+
+    <!-- ── Left: Form panel ── -->
+    <div class="auth-panel auth-panel-main">
+        <a th:href="@{/}" class="auth-brand">
+            <div class="nav-logo-mark">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.5">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+            </div>
+            <span class="nav-logo-text">Tech<span>Forge</span></span>
+        </a>
+
+        <div class="auth-card" style="max-width:460px;">
+            <h1 class="auth-title">Create account</h1>
+            <p class="auth-subtitle">Join TechForge and start shopping premium tech today.</p>
+
+            <!-- Global error -->
+            <div th:if="${errorMessage}"
+                 style="background:rgba(255,68,102,0.1);border:1px solid rgba(255,68,102,0.4);
+                  border-radius:6px;padding:12px 16px;font-size:0.88rem;
+                  color:#ff4466;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"/>
+                    <line x1="12" y1="8" x2="12" y2="12"/>
+                    <line x1="12" y1="16" x2="12.01" y2="16"/>
+                </svg>
+                <span th:text="${errorMessage}">Something went wrong.</span>
+            </div>
+
+            <form th:action="@{/register}" th:object="${registerForm}"
+                  method="post" class="auth-form" novalidate>
+<!--                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>-->
+
+                <!-- Name row -->
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="firstName" class="form-label">First name</label>
+                        <div class="input-group">
+                            <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+                            <input id="firstName" th:field="*{firstName}" type="text"
+                                   class="form-input"
+                                   th:classappend="${#fields.hasErrors('firstName')} ? 'error'"
+                                   placeholder="Alex"
+                                   autocomplete="given-name" required/>
+                        </div>
+                        <span th:if="${#fields.hasErrors('firstName')}"
+                              class="form-error" th:errors="*{firstName}"></span>
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName" class="form-label">Last name</label>
+                        <input id="lastName" th:field="*{lastName}" type="text"
+                               class="form-input"
+                               th:classappend="${#fields.hasErrors('lastName')} ? 'error'"
+                               placeholder="Johnson"
+                               autocomplete="family-name" required/>
+                        <span th:if="${#fields.hasErrors('lastName')}"
+                              class="form-error" th:errors="*{lastName}"></span>
+                    </div>
+                </div>
+
+                <!-- Email -->
+                <div class="form-group">
+                    <label for="email" class="form-label">Email address</label>
+                    <div class="input-group">
+                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
+                            <polyline points="22,6 12,13 2,6"/>
+                        </svg>
+                        <input id="email" th:field="*{email}" type="email"
+                               class="form-input"
+                               th:classappend="${#fields.hasErrors('email')} ? 'error'"
+                               placeholder="you@example.com"
+                               autocomplete="email" required/>
+                    </div>
+                    <span th:if="${#fields.hasErrors('email')}"
+                          class="form-error" th:errors="*{email}"></span>
+                </div>
+
+                <!-- Phone (optional) -->
+                <div class="form-group">
+                    <label for="phone" class="form-label">
+                        Phone number
+                        <span style="color:var(--white-dim);font-weight:400;text-transform:none;letter-spacing:0;">
+              (optional)
+            </span>
+                    </label>
+                    <div class="input-group">
+                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2z"/>
+                        </svg>
+                        <input id="phone" th:field="*{phone}" type="tel"
+                               class="form-input"
+                               placeholder="+1 (555) 000-0000"
+                               autocomplete="tel"/>
+                    </div>
+                </div>
+
+                <!-- Password -->
+                <div class="form-group">
+                    <label for="password" class="form-label">Password</label>
+                    <div class="input-group" style="position:relative;">
+                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        <input id="password" th:field="*{password}" type="password"
+                               class="form-input"
+                               th:classappend="${#fields.hasErrors('password')} ? 'error'"
+                               placeholder="Min 8 characters"
+                               autocomplete="new-password" required
+                               style="padding-right:48px;"
+                               oninput="checkStrength(this.value)"/>
+                        <button type="button" id="togglePwd"
+                                style="position:absolute;right:12px;top:50%;transform:translateY(-50%);
+                           background:none;border:none;color:var(--white-dim);cursor:pointer;padding:4px;"
+                                aria-label="Show password">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2">
+                                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                <circle cx="12" cy="12" r="3"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <!-- Password strength bar -->
+                    <div style="margin-top:8px;">
+                        <div style="height:4px;background:var(--border);border-radius:4px;overflow:hidden;">
+                            <div id="strengthBar"
+                                 style="height:100%;width:0;border-radius:4px;transition:all 0.3s ease;"></div>
+                        </div>
+                        <span id="strengthLabel"
+                              style="font-size:0.73rem;color:var(--white-dim);margin-top:4px;display:block;"></span>
+                    </div>
+                    <span th:if="${#fields.hasErrors('password')}"
+                          class="form-error" th:errors="*{password}"></span>
+                </div>
+
+                <!-- Confirm password -->
+                <div class="form-group">
+                    <label for="confirmPassword" class="form-label">Confirm password</label>
+                    <div class="input-group" style="position:relative;">
+                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                        </svg>
+                        <input id="confirmPassword" th:field="*{confirmPassword}" type="password"
+                               class="form-input"
+                               th:classappend="${#fields.hasErrors('confirmPassword')} ? 'error'"
+                               placeholder="Re-enter your password"
+                               autocomplete="new-password" required
+                               style="padding-right:48px;"/>
+                        <span id="matchIcon"
+                              style="position:absolute;right:14px;top:50%;transform:translateY(-50%);
+                         font-size:0.85rem;display:none;"></span>
+                    </div>
+                    <span th:if="${#fields.hasErrors('confirmPassword')}"
+                          class="form-error" th:errors="*{confirmPassword}"></span>
+                </div>
+
+                <!-- Terms checkbox -->
+                <div class="form-group">
+                    <label style="display:flex;align-items:flex-start;gap:10px;cursor:pointer;
+                        font-size:0.87rem;color:var(--white-dim);line-height:1.5;">
+                        <input type="checkbox" name="acceptTerms" required
+                               style="accent-color:var(--cyan);width:15px;height:15px;
+                          margin-top:2px;flex-shrink:0;"/>
+                        <span>
+              I agree to the
+              <a th:href="@{/terms}" style="color:var(--cyan);">Terms of Service</a>
+              and
+              <a th:href="@{/privacy}" style="color:var(--cyan);">Privacy Policy</a>
+            </span>
+                    </label>
+                </div>
+
+                <!-- Subscribe checkbox -->
+                <div class="form-group" style="margin-top:-8px;">
+                    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;
+                        font-size:0.87rem;color:var(--white-dim);">
+                        <input type="checkbox" name="newsletter" checked
+                               style="accent-color:var(--cyan);width:15px;height:15px;"/>
+                        Send me deals, new arrivals, and tech news
+                    </label>
+                </div>
+
+                <!-- Submit -->
+                <button type="submit" class="btn btn-primary btn-full" style="margin-top:4px;">
+                    Create Account
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.5">
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                        <polyline points="12 5 19 12 12 19"/>
+                    </svg>
+                </button>
+
+                <div class="auth-divider">or sign up with</div>
+
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+                    <a th:href="@{/oauth2/authorization/google}" class="btn btn-ghost"
+                       style="justify-content:center;">
+                        <svg width="17" height="17" viewBox="0 0 24 24">
+                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/>
+                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Google
+                    </a>
+                    <a th:href="@{/oauth2/authorization/github}" class="btn btn-ghost"
+                       style="justify-content:center;">
+                        <svg width="17" height="17" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+                        </svg>
+                        GitHub
+                    </a>
+                </div>
+            </form>
+
+            <p class="auth-footer">
+                Already have an account?
+                <a th:href="@{/login}">Sign in here</a>
+            </p>
+        </div>
+    </div>
+
+    <!-- ── Right: Visual panel ── -->
+    <div class="auth-panel auth-panel-visual">
+        <h2 class="auth-visual-title">Join <span style="color:var(--cyan);">300,000+</span><br/>Tech Enthusiasts</h2>
+        <p class="auth-visual-sub">
+            Get access to exclusive member pricing, early access to new products, and a personalised shopping experience.
+        </p>
+        <div class="auth-visual-features">
+            <div class="auth-visual-feat">
+                <div class="auth-feat-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <polyline points="20 12 20 22 4 22 4 12"/>
+                        <rect x="2" y="7" width="20" height="5"/>
+                        <line x1="12" y1="22" x2="12" y2="7"/>
+                        <path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/>
+                        <path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/>
+                    </svg>
+                </div>
+                <span class="auth-feat-text">Welcome gift: $20 off your first order</span>
+            </div>
+            <div class="auth-visual-feat">
+                <div class="auth-feat-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </div>
+                <span class="auth-feat-text">Wishlist & save products for later</span>
+            </div>
+            <div class="auth-visual-feat">
+                <div class="auth-feat-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <line x1="12" y1="1" x2="12" y2="23"/>
+                        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                </div>
+                <span class="auth-feat-text">Earn 1 TechPoint per $1 spent</span>
+            </div>
+            <div class="auth-visual-feat">
+                <div class="auth-feat-icon">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <path d="M18 8h1a4 4 0 0 1 0 8h-1"/>
+                        <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/>
+                        <line x1="6" y1="1" x2="6" y2="4"/>
+                        <line x1="10" y1="1" x2="10" y2="4"/>
+                        <line x1="14" y1="1" x2="14" y2="4"/>
+                    </svg>
+                </div>
+                <span class="auth-feat-text">Early access to sales and drops</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Toggle password visibility
+    document.getElementById('togglePwd')?.addEventListener('click', function() {
+        const pwd = document.getElementById('password');
+        const isText = pwd.type === 'text';
+        pwd.type = isText ? 'password' : 'text';
+        this.style.color = isText ? 'var(--white-dim)' : 'var(--cyan)';
+    });
+
+    // Password strength meter
+    function checkStrength(val) {
+        const bar   = document.getElementById('strengthBar');
+        const label = document.getElementById('strengthLabel');
+        let score = 0;
+        if (val.length >= 8)                     score++;
+        if (/[A-Z]/.test(val))                   score++;
+        if (/[0-9]/.test(val))                   score++;
+        if (/[^A-Za-z0-9]/.test(val))            score++;
+        const levels = [
+            { w: '0%',   color: 'transparent', text: '' },
+            { w: '25%',  color: '#ff4466',     text: 'Weak' },
+            { w: '50%',  color: '#ffb020',     text: 'Fair' },
+            { w: '75%',  color: '#00d4ff',     text: 'Good' },
+            { w: '100%', color: '#00e5a0',     text: 'Strong' },
+        ];
+        bar.style.width       = levels[score].w;
+        bar.style.background  = levels[score].color;
+        label.textContent     = levels[score].text;
+        label.style.color     = levels[score].color;
+    }
+
+    // Confirm password match indicator
+    const pwd  = document.getElementById('password');
+    const cpwd = document.getElementById('confirmPassword');
+    const icon = document.getElementById('matchIcon');
+    function checkMatch() {
+        if (!cpwd.value) { icon.style.display = 'none'; return; }
+        icon.style.display = 'block';
+        if (pwd.value === cpwd.value) {
+            icon.textContent = '✓'; icon.style.color = 'var(--green)';
+        } else {
+            icon.textContent = '✗'; icon.style.color = 'var(--red)';
+        }
+    }
+    cpwd?.addEventListener('input', checkMatch);
+    pwd?.addEventListener('input', checkMatch);
+</script>
+</body>
+</html>

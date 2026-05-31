@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title th:text="${pageTitle} ?: 'TechForge — Next-Gen Tech Store'">TechForge — Next-Gen Tech Store</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+    <link rel="icon" type="image/svg+xml" th:href="@{/images/favicon.svg}"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<header>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <!-- Logo -->
+            <a th:href="@{/}" class="nav-logo">
+                <div class="nav-logo-mark">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                </div>
+                <span class="nav-logo-text">Tech<span>Forge</span></span>
+            </a>
+
+            <!-- Category Links -->
+            <nav class="nav-categories">
+                <a th:href="@{/products?category=laptops}"     class="nav-cat-btn">Laptops</a>
+                <a th:href="@{/products?category=phones}"      class="nav-cat-btn">Phones</a>
+                <a th:href="@{/products?category=audio}"       class="nav-cat-btn">Audio</a>
+                <a th:href="@{/products?category=accessories}" class="nav-cat-btn">Accessories</a>
+                <a th:href="@{/products?category=gaming}"      class="nav-cat-btn">Gaming</a>
+            </nav>
+
+            <!-- Search -->
+            <div class="nav-search">
+                <svg class="nav-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                </svg>
+                <input type="search"
+                       th:value="${searchQuery}"
+                       name="q"
+                       placeholder="Search products, brands..."
+                       autocomplete="off"/>
+            </div>
+
+            <!-- Action icons -->
+            <div class="nav-actions">
+                <a th:href="@{/wishlist}" class="nav-action-btn" title="Wishlist">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </a>
+                <a th:href="@{/cart}" class="nav-action-btn" title="Cart">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    <span class="badge" th:text="${cartCount} ?: 0">3</span>
+                </a>
+
+                <!-- Authenticated user dropdown or login button -->
+                <th:block th:if="${user != null}">
+                    <a th:href="@{/account}" class="nav-action-btn" title="Account">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                            <circle cx="12" cy="7" r="4"/>
+                        </svg>
+                    </a>
+                </th:block>
+                <th:block th:unless="${user != null}">
+                    <a th:href="@{/login}" class="nav-login-btn">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="2">
+                            <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+                            <polyline points="10 17 15 12 10 7"/>
+                            <line x1="15" y1="12" x2="3" y2="12"/>
+                        </svg>
+                        <span>Sign In</span>
+                    </a>
+                </th:block>
+
+                <!-- Mobile hamburger -->
+                <button class="nav-mobile-toggle" aria-label="Menu">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- ══════════════════ HERO ══════════════════ -->
+<section class="hero">
+    <div class="hero-grid-bg"></div>
+    <div class="hero-inner">
+        <div class="hero-content">
+            <div class="hero-eyebrow">
+                <span class="hero-eyebrow-dot"></span>
+                New Arrivals 2025 — Up to 30% off
+            </div>
+            <h1 class="hero-title">
+                Gear Up With<br/>
+                <span class="accent">Next-Gen</span><br/>
+                Technology
+            </h1>
+            <p class="hero-desc">
+                Discover the world's finest laptops, smartphones, audio, and accessories.
+                Curated for engineers, creators, and professionals.
+            </p>
+            <div class="hero-cta">
+                <a th:href="@{/products}" class="btn btn-primary">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                    </svg>
+                    Shop Now
+                </a>
+                <a th:href="@{/products?category=new}" class="btn btn-ghost">
+                    View New Arrivals
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <div class="hero-stat-value">12K+</div>
+                    <div class="hero-stat-label">Products</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">98%</div>
+                    <div class="hero-stat-label">Satisfaction</div>
+                </div>
+                <div class="hero-stat">
+                    <div class="hero-stat-value">150+</div>
+                    <div class="hero-stat-label">Brands</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Hero visual -->
+        <div class="hero-visual">
+            <div class="hero-device">
+                <img src="https://images.unsplash.com/photo-1593640495253-23196b27a87f?w=800&q=80"
+                     th:src="@{/images/hero-device.jpg}"
+                     alt="Featured Product" class="hero-device-img"/>
+                <div class="hero-device-label">
+                    <div>
+                        <div class="hero-device-label-name">MacBook Pro M3</div>
+                        <div class="hero-device-label-price">from $1,999</div>
+                    </div>
+                </div>
+            </div>
+            <div class="hero-floating-card card-1">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Free 2-day shipping
+            </div>
+            <div class="hero-floating-card card-2">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#00e5a0" stroke-width="2">
+                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                </svg>
+                2-year warranty
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════ CATEGORIES ══════════════════ -->
+<section class="categories-section">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-label">Browse by Category</div>
+            <h2 class="section-title">Everything Tech, <br/>All in One Place</h2>
+        </div>
+        <div class="categories-grid">
+            <!-- Static categories — replace with th:each when backend is connected -->
+            <a th:href="@{/products?category=laptops}" class="category-card">
+                <div class="cat-icon">💻</div>
+                <div class="cat-name">Laptops</div>
+                <div class="cat-count">248 products</div>
+            </a>
+            <a th:href="@{/products?category=phones}" class="category-card">
+                <div class="cat-icon">📱</div>
+                <div class="cat-name">Smartphones</div>
+                <div class="cat-count">312 products</div>
+            </a>
+            <a th:href="@{/products?category=audio}" class="category-card">
+                <div class="cat-icon">🎧</div>
+                <div class="cat-name">Audio</div>
+                <div class="cat-count">187 products</div>
+            </a>
+            <a th:href="@{/products?category=monitors}" class="category-card">
+                <div class="cat-icon">🖥️</div>
+                <div class="cat-name">Monitors</div>
+                <div class="cat-count">94 products</div>
+            </a>
+            <a th:href="@{/products?category=gaming}" class="category-card">
+                <div class="cat-icon">🎮</div>
+                <div class="cat-name">Gaming</div>
+                <div class="cat-count">156 products</div>
+            </a>
+            <a th:href="@{/products?category=tablets}" class="category-card">
+                <div class="cat-icon">📟</div>
+                <div class="cat-name">Tablets</div>
+                <div class="cat-count">73 products</div>
+            </a>
+            <a th:href="@{/products?category=cameras}" class="category-card">
+                <div class="cat-icon">📷</div>
+                <div class="cat-name">Cameras</div>
+                <div class="cat-count">119 products</div>
+            </a>
+            <a th:href="@{/products?category=accessories}" class="category-card">
+                <div class="cat-icon">🖱️</div>
+                <div class="cat-name">Accessories</div>
+                <div class="cat-count">540 products</div>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- ══════════════════ FEATURED PRODUCTS ══════════════════ -->
+<section class="products-section">
+    <div class="container">
+        <div class="section-header" style="display:flex;align-items:flex-end;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+            <div>
+                <div class="section-label">Featured Products</div>
+                <h2 class="section-title">Handpicked for You</h2>
+            </div>
+            <a th:href="@{/products}" class="btn btn-outline btn-sm">View All Products</a>
+        </div>
+
+        <!-- Filter chips -->
+        <div class="products-toolbar">
+            <div class="filter-chips">
+                <button class="filter-chip active">All</button>
+                <button class="filter-chip">New Arrivals</button>
+                <button class="filter-chip">Best Sellers</button>
+                <button class="filter-chip">On Sale</button>
+                <button class="filter-chip">Under $500</button>
+            </div>
+            <select class="sort-select">
+                <option>Sort: Featured</option>
+                <option>Price: Low to High</option>
+                <option>Price: High to Low</option>
+                <option>Best Rated</option>
+                <option>Newest First</option>
+            </select>
+        </div>
+
+        <!-- Product grid — th:each ready -->
+        <div class="products-grid">
+
+            <!--/* Thymeleaf loop — uncomment when backend is ready:
+            <div th:each="product : ${products}" class="product-card">
+              <div class="product-img-wrap">
+                <img th:src="${product.imageUrl}" th:alt="${product.name}"/>
+                <span th:if="${product.isNew}" class="product-badge new">NEW</span>
+                <span th:if="${product.discountPercent > 0}" class="product-badge"
+                      th:text="'-' + ${product.discountPercent} + '%'">-20%</span>
+                <button class="product-wishlist" th:data-id="${product.id}">♡</button>
+              </div>
+              <div class="product-body">
+                <div class="product-category" th:text="${product.category}">Laptops</div>
+                <div class="product-name" th:text="${product.name}">Product Name</div>
+                <div class="product-rating">
+                  <div class="stars">
+                    <span th:each="i : ${#numbers.sequence(1,5)}"
+                          th:class="${i <= product.rating} ? 'star' : 'star empty'">★</span>
+                  </div>
+                  <span class="rating-count" th:text="'(' + ${product.reviewCount} + ')'"></span>
+                </div>
+                <div class="product-footer">
+                  <div class="product-price">
+                    <span class="price-current" th:text="'$' + ${product.price}">$999</span>
+                    <span th:if="${product.originalPrice != null}"
+                          class="price-original" th:text="'$' + ${product.originalPrice}">$1299</span>
+                  </div>
+                  <a th:href="@{/cart/add(productId=${product.id})}" class="product-add-btn">
+                    +
+                  </a>
+                </div>
+              </div>
+            </div>
+            */-->
+
+            <!-- Static demo cards -->
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80"
+                         th:src="@{/images/products/macbook.jpg}" alt="MacBook Pro M3"/>
+                    <span class="product-badge new">NEW</span>
+                    <button class="product-wishlist">♡</button>
+                </div>
+                <div class="product-body">
+                    <div class="product-category">Laptops</div>
+                    <div class="product-name">MacBook Pro 14" M3 Pro</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                            <span class="star">★</span><span class="star">★</span>
+                        </div>
+                        <span class="rating-count">(284)</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-current">$1,999</span>
+                        </div>
+                        <a th:href="@{/cart/add(productId=1)}" class="product-add-btn">+</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&q=80"
+                         th:src="@{/images/products/iphone.jpg}" alt="iPhone 15 Pro"/>
+                    <span class="product-badge">-15%</span>
+                    <button class="product-wishlist">♡</button>
+                </div>
+                <div class="product-body">
+                    <div class="product-category">Smartphones</div>
+                    <div class="product-name">iPhone 15 Pro Max 256GB</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                            <span class="star">★</span><span class="star empty">★</span>
+                        </div>
+                        <span class="rating-count">(521)</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-current">$1,019</span>
+                            <span class="price-original">$1,199</span>
+                        </div>
+                        <a th:href="@{/cart/add(productId=2)}" class="product-add-btn">+</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80"
+                         th:src="@{/images/products/headphones.jpg}" alt="Sony WH-1000XM5"/>
+                    <button class="product-wishlist">♡</button>
+                </div>
+                <div class="product-body">
+                    <div class="product-category">Audio</div>
+                    <div class="product-name">Sony WH-1000XM5 Wireless</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                            <span class="star">★</span><span class="star">★</span>
+                        </div>
+                        <span class="rating-count">(1,047)</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-current">$349</span>
+                            <span class="price-original">$399</span>
+                        </div>
+                        <a th:href="@{/cart/add(productId=3)}" class="product-add-btn">+</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80"
+                         th:src="@{/images/products/laptop2.jpg}" alt="Dell XPS 15"/>
+                    <span class="product-badge">-20%</span>
+                    <button class="product-wishlist">♡</button>
+                </div>
+                <div class="product-body">
+                    <div class="product-category">Laptops</div>
+                    <div class="product-name">Dell XPS 15 OLED RTX 4060</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                            <span class="star">★</span><span class="star empty">★</span>
+                        </div>
+                        <span class="rating-count">(339)</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-current">$1,599</span>
+                            <span class="price-original">$1,999</span>
+                        </div>
+                        <a th:href="@{/cart/add(productId=4)}" class="product-add-btn">+</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&q=80"
+                         th:src="@{/images/products/watch.jpg}" alt="Samsung Galaxy Watch"/>
+                    <span class="product-badge new">NEW</span>
+                    <button class="product-wishlist">♡</button>
+                </div>
+                <div class="product-body">
+                    <div class="product-category">Wearables</div>
+                    <div class="product-name">Samsung Galaxy Watch 6 Pro</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                            <span class="star">★</span><span class="star empty">★</span>
+                        </div>
+                        <span class="rating-count">(176)</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-current">$449</span>
+                        </div>
+                        <a th:href="@{/cart/add(productId=5)}" class="product-add-btn">+</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&q=80"
+                         th:src="@{/images/products/monitor.jpg}" alt="LG UltraWide"/>
+                    <button class="product-wishlist">♡</button>
+                </div>
+                <div class="product-body">
+                    <div class="product-category">Monitors</div>
+                    <div class="product-name">LG 34" UltraWide IPS 144Hz</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                            <span class="star">★</span><span class="star">★</span>
+                        </div>
+                        <span class="rating-count">(892)</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-current">$799</span>
+                            <span class="price-original">$999</span>
+                        </div>
+                        <a th:href="@{/cart/add(productId=6)}" class="product-add-btn">+</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&q=80"
+                         th:src="@{/images/products/airpods.jpg}" alt="AirPods Pro"/>
+                    <span class="product-badge">-10%</span>
+                    <button class="product-wishlist">♡</button>
+                </div>
+                <div class="product-body">
+                    <div class="product-category">Audio</div>
+                    <div class="product-name">Apple AirPods Pro 2nd Gen</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                            <span class="star">★</span><span class="star">★</span>
+                        </div>
+                        <span class="rating-count">(2,113)</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-current">$224</span>
+                            <span class="price-original">$249</span>
+                        </div>
+                        <a th:href="@{/cart/add(productId=7)}" class="product-add-btn">+</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="product-card">
+                <div class="product-img-wrap">
+                    <img src="https://images.unsplash.com/photo-1593640408182-31c228b42c41?w=400&q=80"
+                         th:src="@{/images/products/rtx.jpg}" alt="RTX 4090"/>
+                    <span class="product-badge new">NEW</span>
+                    <button class="product-wishlist">♡</button>
+                </div>
+                <div class="product-body">
+                    <div class="product-category">Gaming</div>
+                    <div class="product-name">NVIDIA RTX 4090 24GB GDDR6X</div>
+                    <div class="product-rating">
+                        <div class="stars">
+                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
+                            <span class="star">★</span><span class="star">★</span>
+                        </div>
+                        <span class="rating-count">(408)</span>
+                    </div>
+                    <div class="product-footer">
+                        <div class="product-price">
+                            <span class="price-current">$1,599</span>
+                        </div>
+                        <a th:href="@{/cart/add(productId=8)}" class="product-add-btn">+</a>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.products-grid -->
+
+        <!-- Pagination -->
+        <nav class="pagination" aria-label="Products pagination">
+            <button class="page-btn">‹</button>
+            <button class="page-btn active">1</button>
+            <button class="page-btn">2</button>
+            <button class="page-btn">3</button>
+            <span style="color:var(--white-dim);padding:0 4px;">…</span>
+            <button class="page-btn">12</button>
+            <button class="page-btn">›</button>
+        </nav>
+    </div><!-- /.container -->
+</section>
+
+<!-- ══════════════════ PROMO BANNER ══════════════════ -->
+<div class="container">
+    <div class="promo-banner">
+        <div>
+            <div class="promo-label">Limited Time Offer</div>
+            <h2 class="promo-title">Student Discount — 20% Off<br/>All Laptops &amp; Tablets</h2>
+            <p class="promo-sub">Valid .edu email required. Offer ends 31 December 2025.</p>
+        </div>
+        <a th:href="@{/deals/student}" class="btn btn-primary" style="flex-shrink:0;">
+            Claim Discount
+        </a>
+    </div>
+</div>
+
+<!-- ══════════════════ FOOTER ══════════════════ -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <!-- Brand col -->
+            <div>
+                <div class="nav-logo" style="margin-bottom:0;">
+                    <div class="nav-logo-mark">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                        </svg>
+                    </div>
+                    <span class="nav-logo-text">Tech<span>Forge</span></span>
+                </div>
+                <p class="footer-brand-desc">
+                    Premium tech hardware curated for professionals and enthusiasts. Free shipping on orders over $99.
+                </p>
+                <div class="footer-socials">
+                    <a href="#" class="social-btn" aria-label="Twitter">𝕏</a>
+                    <a href="#" class="social-btn" aria-label="GitHub">GH</a>
+                    <a href="#" class="social-btn" aria-label="LinkedIn">in</a>
+                    <a href="#" class="social-btn" aria-label="YouTube">YT</a>
+                </div>
+            </div>
+            <!-- Shop col -->
+            <div>
+                <div class="footer-col-title">Shop</div>
+                <nav class="footer-links">
+                    <a th:href="@{/products?category=laptops}">Laptops</a>
+                    <a th:href="@{/products?category=phones}">Smartphones</a>
+                    <a th:href="@{/products?category=audio}">Audio</a>
+                    <a th:href="@{/products?category=gaming}">Gaming</a>
+                    <a th:href="@{/products?category=accessories}">Accessories</a>
+                    <a th:href="@{/deals}">Deals &amp; Offers</a>
+                </nav>
+            </div>
+            <!-- Support col -->
+            <div>
+                <div class="footer-col-title">Support</div>
+                <nav class="footer-links">
+                    <a th:href="@{/help}">Help Centre</a>
+                    <a th:href="@{/shipping}">Shipping Info</a>
+                    <a th:href="@{/returns}">Returns Policy</a>
+                    <a th:href="@{/warranty}">Warranty</a>
+                    <a th:href="@{/track}">Track Order</a>
+                    <a th:href="@{/contact}">Contact Us</a>
+                </nav>
+            </div>
+            <!-- Company col -->
+            <div>
+                <div class="footer-col-title">Company</div>
+                <nav class="footer-links">
+                    <a th:href="@{/about}">About TechForge</a>
+                    <a th:href="@{/careers}">Careers</a>
+                    <a th:href="@{/press}">Press Kit</a>
+                    <a th:href="@{/blog}">Blog</a>
+                    <a th:href="@{/affiliates}">Affiliates</a>
+                    <a th:href="@{/admin}">Admin Portal</a>
+                </nav>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div class="footer-bottom">
+            <span class="footer-bottom-text">© 2025 TechForge. All rights reserved.</span>
+            <nav class="footer-bottom-links">
+                <a th:href="@{/privacy}">Privacy Policy</a>
+                <a th:href="@{/terms}">Terms of Service</a>
+                <a th:href="@{/cookies}">Cookies</a>
+            </nav>
+        </div>
+    </div>
+</footer>
+
+<script>
+    // Filter chip toggle
+    document.querySelectorAll('.filter-chip').forEach(chip => {
+        chip.addEventListener('click', () => {
+            document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+            chip.classList.add('active');
+        });
+    });
+    // Mobile nav toggle
+    document.querySelector('.nav-mobile-toggle')?.addEventListener('click', () => {
+        document.querySelector('.nav-categories')?.classList.toggle('open');
+    });
+</script>
+</body>
+</html>

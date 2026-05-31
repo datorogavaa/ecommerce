@@ -4,6 +4,7 @@ package com.ecommerce.restControllers;
 import com.ecommerce.dto.UserDto;
 import com.ecommerce.entities.User;
 import com.ecommerce.services.UserService;
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -21,7 +22,7 @@ public class UserRestController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerUser(@RequestBody UserDto userDto) {
+    public ResponseEntity<String> registerUser(@Valid @RequestBody UserDto userDto) {
         userService.createUser(userDto);
         return ResponseEntity.ok("User registered successfully");
     }
@@ -38,13 +39,13 @@ public class UserRestController {
 
 
     @PutMapping("/updateUser/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable Long id, @RequestBody UserDto userDto) {
+    public ResponseEntity<String> updateUser(@PathVariable Long id, @Valid @RequestBody UserDto userDto) {
         userService.updateUser(id,userDto);
         return ResponseEntity.ok("User updated successfully");
     }
 
     @PatchMapping("/updateUserField/{id}")
-    public ResponseEntity<String> updateUserField(@PathVariable Long id, @RequestBody Map<String, Object> updates) {
+    public ResponseEntity<String> updateUserField(@PathVariable Long id,@Valid @RequestBody Map<String, Object> updates) {
         userService.updateUserField(id, updates);
         return ResponseEntity.ok("User field updated successfully");
     }

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Cart &amp; Checkout — TechForge</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+
+<!-- ══════════════════ NAVBAR ══════════════════ -->
+<header>
+    <nav class="navbar">
+        <div class="navbar-inner">
+            <a th:href="@{/}" class="nav-logo">
+                <div class="nav-logo-mark">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.5">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                    </svg>
+                </div>
+                <span class="nav-logo-text">Tech<span>Forge</span></span>
+            </a>
+            <!-- Checkout steps -->
+            <div style="display:flex;align-items:center;gap:8px;margin:0 auto;font-size:0.85rem;">
+        <span style="color:var(--cyan);font-weight:600;display:flex;align-items:center;gap:6px;">
+          <span style="width:22px;height:22px;background:var(--cyan);color:var(--navy);
+                       border-radius:50%;display:flex;align-items:center;justify-content:center;
+                       font-size:0.75rem;font-weight:700;">1</span>
+          Cart
+        </span>
+                <span style="color:var(--border);padding:0 4px;">──────</span>
+                <span style="color:var(--white-dim);display:flex;align-items:center;gap:6px;">
+          <span style="width:22px;height:22px;background:var(--border);color:var(--white-dim);
+                       border-radius:50%;display:flex;align-items:center;justify-content:center;
+                       font-size:0.75rem;font-weight:700;">2</span>
+          Payment
+        </span>
+                <span style="color:var(--border);padding:0 4px;">──────</span>
+                <span style="color:var(--white-dim);display:flex;align-items:center;gap:6px;">
+          <span style="width:22px;height:22px;background:var(--border);color:var(--white-dim);
+                       border-radius:50%;display:flex;align-items:center;justify-content:center;
+                       font-size:0.75rem;font-weight:700;">3</span>
+          Confirm
+        </span>
+            </div>
+            <div class="nav-actions">
+                <a th:href="@{/}" class="btn btn-ghost btn-sm">
+                    ← Continue Shopping
+                </a>
+            </div>
+        </div>
+    </nav>
+</header>
+
+<!-- ══════════════════ CART PAGE ══════════════════ -->
+<main class="cart-page">
+    <div class="container">
+        <h1 class="page-title">Your Cart</h1>
+        <nav class="page-breadcrumb">
+            <a th:href="@{/}">Home</a>
+            <span>›</span>
+            <a th:href="@{/products}">Products</a>
+            <span>›</span>
+            <span>Cart</span>
+        </nav>
+
+        <div class="cart-layout">
+
+            <!-- ── Cart items column ── -->
+            <div>
+
+                <!-- Success message -->
+                <div th:if="${successMessage}"
+                     style="background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.4);
+                    border-radius:6px;padding:12px 16px;font-size:0.88rem;color:#00e5a0;
+                    margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <polyline points="20 6 9 17 4 12"/>
+                    </svg>
+                    <span th:text="${successMessage}">Item added to cart.</span>
+                </div>
+
+                <!-- Empty state -->
+                <div th:if="${#lists.isEmpty(cartItems)}" class="cart-empty">
+                    <div class="cart-empty-icon">
+                        <svg width="48" height="48" viewBox="0 0 24 24" fill="none"
+                             stroke="currentColor" stroke-width="1.5">
+                            <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                            <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
+                        </svg>
+                    </div>
+                    <h2 class="cart-empty-title">Your cart is empty</h2>
+                    <p class="cart-empty-sub">Add some products to get started.</p>
+                    <a th:href="@{/products}" class="btn btn-primary">Browse Products</a>
+                </div>
+
+                <!-- Cart items list — th:each ready -->
+                <div class="cart-items" th:unless="${#lists.isEmpty(cartItems)}">
+
+                    <!--/* Thymeleaf loop — uncomment when backend ready:
+                    <div th:each="item : ${cartItems}" class="cart-item">
+                      <div class="cart-item-img">
+                        <img th:src="${item.product.imageUrl}" th:alt="${item.product.name}"/>
+                      </div>
+                      <div class="cart-item-info">
+                        <div class="cart-item-cat" th:text="${item.product.category}">Category</div>
+                        <div class="cart-item-name" th:text="${item.product.name}">Product Name</div>
+                        <div class="cart-item-spec" th:text="${item.product.spec}">Spec</div>
+                      </div>
+                      <div class="cart-item-controls">
+                        <div class="qty-control">
+                          <form th:action="@{/cart/decrease}" method="post" style="display:contents;">
+                            <input type="hidden" name="itemId" th:value="${item.id}"/>
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="qty-btn">−</button>
+                          </form>
+                          <span class="qty-val" th:text="${item.quantity}">1</span>
+                          <form th:action="@{/cart/increase}" method="post" style="display:contents;">
+                            <input type="hidden" name="itemId" th:value="${item.id}"/>
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <button type="submit" class="qty-btn">+</button>
+                          </form>
+                        </div>
+                        <div class="cart-item-price"
+                             th:text="'$' + ${#numbers.formatDecimal(item.lineTotal,1,'COMMA',2,'POINT')}">
+                          $999.00
+                        </div>
+                        <form th:action="@{/cart/remove}" method="post">
+                          <input type="hidden" name="itemId" th:value="${item.id}"/>
+                          <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                          <button type="submit" class="cart-item-remove" title="Remove item">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2">
+                              <polyline points="3 6 5 6 21 6"/>
+                              <path d="M19 6l-1 14H6L5 6"/>
+                              <path d="M10 11v6M14 11v6"/>
+                              <path d="M9 6V4h6v2"/>
+                            </svg>
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                    */-->
+
+                    <!-- Static demo items -->
+                    <div class="cart-item">
+                        <div class="cart-item-img">
+                            <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=200&q=80"
+                                 th:src="@{/images/products/macbook.jpg}" alt="MacBook Pro"/>
+                        </div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-cat">Laptops</div>
+                            <div class="cart-item-name">MacBook Pro 14" M3 Pro</div>
+                            <div class="cart-item-spec">Space Black · 18GB RAM · 512GB SSD</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                                <span class="qty-val">1</span>
+                                <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                            </div>
+                            <div class="cart-item-price">$1,999.00</div>
+                            <button class="cart-item-remove" title="Remove" onclick="removeItem(this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6l-1 14H6L5 6"/>
+                                    <path d="M10 11v6M14 11v6"/>
+                                    <path d="M9 6V4h6v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cart-item">
+                        <div class="cart-item-img">
+                            <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=200&q=80"
+                                 th:src="@{/images/products/headphones.jpg}" alt="Sony WH-1000XM5"/>
+                        </div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-cat">Audio</div>
+                            <div class="cart-item-name">Sony WH-1000XM5 Wireless</div>
+                            <div class="cart-item-spec">Black · Noise Cancelling</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                                <span class="qty-val">2</span>
+                                <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                            </div>
+                            <div class="cart-item-price">$698.00</div>
+                            <button class="cart-item-remove" title="Remove" onclick="removeItem(this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6l-1 14H6L5 6"/>
+                                    <path d="M10 11v6M14 11v6"/>
+                                    <path d="M9 6V4h6v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cart-item">
+                        <div class="cart-item-img">
+                            <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=200&q=80"
+                                 th:src="@{/images/products/airpods.jpg}" alt="AirPods Pro"/>
+                        </div>
+                        <div class="cart-item-info">
+                            <div class="cart-item-cat">Audio</div>
+                            <div class="cart-item-name">Apple AirPods Pro 2nd Gen</div>
+                            <div class="cart-item-spec">White · USB-C</div>
+                        </div>
+                        <div class="cart-item-controls">
+                            <div class="qty-control">
+                                <button class="qty-btn" onclick="changeQty(this,-1)">−</button>
+                                <span class="qty-val">1</span>
+                                <button class="qty-btn" onclick="changeQty(this,1)">+</button>
+                            </div>
+                            <div class="cart-item-price">$224.00</div>
+                            <button class="cart-item-remove" title="Remove" onclick="removeItem(this)">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2">
+                                    <polyline points="3 6 5 6 21 6"/>
+                                    <path d="M19 6l-1 14H6L5 6"/>
+                                    <path d="M10 11v6M14 11v6"/>
+                                    <path d="M9 6V4h6v2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+
+                </div><!-- /.cart-items -->
+
+                <!-- Shipping notice -->
+                <div style="margin-top:16px;background:rgba(0,229,160,0.08);
+                    border:1px solid rgba(0,229,160,0.25);border-radius:8px;
+                    padding:14px 18px;display:flex;align-items:center;gap:12px;font-size:0.88rem;">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                         stroke="#00e5a0" stroke-width="2">
+                        <rect x="1" y="3" width="15" height="13"/>
+                        <polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/>
+                        <circle cx="5.5" cy="18.5" r="2.5"/>
+                        <circle cx="18.5" cy="18.5" r="2.5"/>
+                    </svg>
+                    <span style="color:var(--green);font-weight:600;">
+            You qualify for FREE 2-day shipping!
+          </span>
+                </div>
+
+            </div><!-- /.left column -->
+
+            <!-- ── Order summary + Payment ── -->
+            <div>
+                <div class="order-summary">
+                    <div class="summary-title">Order Summary</div>
+
+                    <!-- Promo code -->
+                    <div class="promo-input-row">
+                        <input type="text" class="form-input" placeholder="Promo / gift code"
+                               id="promoInput"/>
+                        <button class="btn btn-outline btn-sm" onclick="applyPromo()">Apply</button>
+                    </div>
+                    <div id="promoMsg" style="font-size:0.8rem;margin-bottom:12px;display:none;"></div>
+
+                    <div class="summary-rows">
+                        <div class="summary-row">
+                            <span class="summary-row-label">Subtotal (4 items)</span>
+                            <span class="summary-row-val" id="subtotal">$2,921.00</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-row-label">Discount</span>
+                            <span class="summary-row-val" style="color:var(--green);" id="discount">—</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-row-label">Shipping</span>
+                            <span class="summary-row-val" style="color:var(--green);">Free</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-row-label">Tax (8%)</span>
+                            <span class="summary-row-val" id="tax">$233.68</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="summary-row-label">Total</span>
+                            <span class="summary-row-val" id="total">$3,154.68</span>
+                        </div>
+                    </div>
+
+                    <!-- ── Payment form ── -->
+                    <div class="payment-section">
+                        <div class="payment-title">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2">
+                                <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                <line x1="1" y1="10" x2="23" y2="10"/>
+                            </svg>
+                            Payment Details
+                        </div>
+
+                        <!-- Payment method toggle -->
+                        <div class="payment-methods">
+                            <button class="pay-method active" onclick="setPayMethod(this,'card')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2">
+                                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                    <line x1="1" y1="10" x2="23" y2="10"/>
+                                </svg>
+                                Card
+                            </button>
+                            <button class="pay-method" onclick="setPayMethod(this,'paypal')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2">
+                                    <path d="M6 9.5c.5-2 2.5-3 4.5-3h4c2 0 3 1 2.5 3C16.5 12 14.5 13 12.5 13H10l-1 5H6.5L8 9.5z"/>
+                                </svg>
+                                PayPal
+                            </button>
+                            <button class="pay-method" onclick="setPayMethod(this,'crypto')">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <path d="M9 8h4a2 2 0 1 1 0 4H9zM9 12h5a2 2 0 1 1 0 4H9z"/>
+                                    <line x1="11" y1="6" x2="11" y2="8"/>
+                                    <line x1="13" y1="6" x2="13" y2="8"/>
+                                    <line x1="11" y1="18" x2="11" y2="20"/>
+                                    <line x1="13" y1="18" x2="13" y2="20"/>
+                                </svg>
+                                Crypto
+                            </button>
+                        </div>
+
+                        <!-- Card form -->
+                        <form th:action="@{/checkout/place-order}" method="post"
+                              class="pay-form" id="payForm">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                            <div class="form-group">
+                                <label class="form-label">Cardholder name</label>
+                                <div class="input-group">
+                                    <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2">
+                                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                        <circle cx="12" cy="7" r="4"/>
+                                    </svg>
+                                    <input type="text" name="cardName" class="form-input"
+                                           placeholder="Alex Johnson" autocomplete="cc-name" required/>
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Card number</label>
+                                <div class="input-group">
+                                    <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                         stroke="currentColor" stroke-width="2">
+                                        <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                                        <line x1="1" y1="10" x2="23" y2="10"/>
+                                    </svg>
+                                    <input type="text" name="cardNumber" id="cardNumber" class="form-input"
+                                           placeholder="0000 0000 0000 0000"
+                                           maxlength="19" autocomplete="cc-number"
+                                           oninput="formatCard(this)" required/>
+                                </div>
+                                <div id="cardBrand" style="font-size:0.75rem;color:var(--white-dim);margin-top:4px;"></div>
+                            </div>
+
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Expiry date</label>
+                                    <input type="text" name="cardExpiry" class="form-input"
+                                           placeholder="MM / YY" maxlength="7"
+                                           autocomplete="cc-exp"
+                                           oninput="formatExpiry(this)" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">CVV</label>
+                                    <div class="input-group">
+                                        <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                             stroke="currentColor" stroke-width="2">
+                                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                        </svg>
+                                        <input type="text" name="cardCvv" class="form-input"
+                                               placeholder="•••" maxlength="4"
+                                               autocomplete="cc-csc" required/>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Billing address -->
+                            <div style="padding-top:14px;border-top:1px solid var(--border);">
+                                <div style="font-size:0.82rem;font-weight:600;color:var(--white-dim);
+                            letter-spacing:0.04em;text-transform:uppercase;margin-bottom:14px;">
+                                    Billing Address
+                                </div>
+                                <div class="form-group" style="margin-bottom:12px;">
+                                    <input type="text" name="address" class="form-input"
+                                           placeholder="Street address" autocomplete="street-address"/>
+                                </div>
+                                <div class="form-row">
+                                    <input type="text" name="city" class="form-input"
+                                           placeholder="City" autocomplete="address-level2"/>
+                                    <input type="text" name="zip" class="form-input"
+                                           placeholder="ZIP / Postcode" autocomplete="postal-code"/>
+                                </div>
+                                <div style="margin-top:12px;">
+                                    <select name="country" class="form-select">
+                                        <option value="">Select country</option>
+                                        <option value="US">United States</option>
+                                        <option value="GB">United Kingdom</option>
+                                        <option value="CA">Canada</option>
+                                        <option value="AU">Australia</option>
+                                        <option value="DE">Germany</option>
+                                        <option value="FR">France</option>
+                                        <option value="JP">Japan</option>
+                                        <option value="SG">Singapore</option>
+                                    </select>
+                                </div>
+                            </div>
+
+                            <!-- Same as shipping -->
+                            <label style="display:flex;align-items:center;gap:8px;cursor:pointer;
+                            font-size:0.85rem;color:var(--white-dim);">
+                                <input type="checkbox" name="sameAsShipping" checked
+                                       style="accent-color:var(--cyan);width:14px;height:14px;"/>
+                                Same as shipping address
+                            </label>
+
+                            <!-- Place order -->
+                            <button type="submit" class="btn btn-primary btn-full"
+                                    style="margin-top:6px;padding:14px 26px;font-size:0.95rem;">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2">
+                                    <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
+                                </svg>
+                                Place Order · $3,154.68
+                            </button>
+
+                            <div class="secure-note">
+                                <svg width="12" height="12" viewBox="0 0 24 24" fill="none"
+                                     stroke="currentColor" stroke-width="2">
+                                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                                </svg>
+                                256-bit SSL encryption · PCI DSS compliant
+                            </div>
+                        </form>
+                    </div><!-- /.payment-section -->
+                </div><!-- /.order-summary -->
+
+                <!-- Accepted cards -->
+                <div style="display:flex;align-items:center;justify-content:center;gap:12px;
+                    margin-top:16px;flex-wrap:wrap;">
+                    <span style="font-size:0.75rem;color:var(--white-dim);">Accepted:</span>
+                    <span class="tag">VISA</span>
+                    <span class="tag">Mastercard</span>
+                    <span class="tag">Amex</span>
+                    <span class="tag">PayPal</span>
+                    <span class="tag">Apple Pay</span>
+                </div>
+
+            </div><!-- /.right column -->
+
+        </div><!-- /.cart-layout -->
+    </div><!-- /.container -->
+</main>
+
+<!-- ══════════════════ FOOTER (minimal) ══════════════════ -->
+<footer style="background:var(--panel);border-top:1px solid var(--border);
+               padding:24px;text-align:center;">
+    <p style="font-size:0.83rem;color:var(--white-dim);">
+        © 2025 TechForge ·
+        <a th:href="@{/privacy}" style="color:var(--cyan);">Privacy</a> ·
+        <a th:href="@{/terms}" style="color:var(--cyan);">Terms</a>
+    </p>
+</footer>
+
+<script>
+    // Quantity controls
+    function changeQty(btn, delta) {
+        const ctrl = btn.closest('.qty-control');
+        const val  = ctrl.querySelector('.qty-val');
+        let qty = parseInt(val.textContent) + delta;
+        if (qty < 1) qty = 1;
+        val.textContent = qty;
+        // TODO: POST to /cart/update with new quantity
+    }
+
+    // Remove item
+    function removeItem(btn) {
+        const item = btn.closest('.cart-item');
+        item.style.opacity = '0';
+        item.style.transform = 'translateX(20px)';
+        item.style.transition = 'all 0.3s ease';
+        setTimeout(() => item.remove(), 300);
+        // TODO: POST to /cart/remove
+    }
+
+    // Payment method toggle
+    function setPayMethod(btn, method) {
+        document.querySelectorAll('.pay-method').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        // TODO: show/hide relevant form sections per method
+    }
+
+    // Card number formatter
+    function formatCard(input) {
+        let v = input.value.replace(/\D/g,'').slice(0,16);
+        input.value = v.replace(/(.{4})/g,'$1 ').trim();
+        const brand = document.getElementById('cardBrand');
+        if (v.startsWith('4')) brand.textContent = '💳 Visa';
+        else if (v.startsWith('5')) brand.textContent = '💳 Mastercard';
+        else if (v.startsWith('3')) brand.textContent = '💳 Amex';
+        else brand.textContent = '';
+    }
+
+    // Expiry formatter
+    function formatExpiry(input) {
+        let v = input.value.replace(/\D/g,'').slice(0,4);
+        if (v.length > 2) v = v.slice(0,2) + ' / ' + v.slice(2);
+        input.value = v;
+    }
+
+    // Promo code
+    function applyPromo() {
+        const code = document.getElementById('promoInput').value.trim().toUpperCase();
+        const msg  = document.getElementById('promoMsg');
+        msg.style.display = 'block';
+        if (code === 'TECH20') {
+            msg.style.color = 'var(--green)';
+            msg.textContent = '✓ Promo applied — 20% discount!';
+            document.getElementById('discount').textContent = '-$584.20';
+        } else if (code === '') {
+            msg.style.color = 'var(--white-dim)';
+            msg.textContent = 'Enter a promo code above.';
+        } else {
+            msg.style.color = 'var(--red)';
+            msg.textContent = '✗ Invalid or expired code.';
+        }
+    }
+</script>
+</body>
+</html>
