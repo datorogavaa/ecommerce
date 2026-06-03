@@ -27,4 +27,14 @@ public class HomeController {
         model.addAttribute("cartItems", null); // ← Add this
         return "cart";
     }
+    @GetMapping("/admin/products")
+    public String admin(Model model) {
+        model.addAttribute("products", null);
+        return "admin-products";
+    }
+    @GetMapping("/admin/dashboard")
+    public String admindashboard(Model model) {
+        model.addAttribute("products", null);
+        return "admin-dashboard";
+    }
 }

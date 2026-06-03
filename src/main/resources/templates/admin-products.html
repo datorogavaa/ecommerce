@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Products — TechForge Admin</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}"/>
+</head>
+<body>
+
+<div class="admin-layout">
+
+    <!-- ══════════ SIDEBAR (shared fragment — replace with th:replace) ══════════ -->
+    <aside class="admin-sidebar" id="sidebar">
+        <div class="sidebar-brand">
+            <div class="nav-logo-mark">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2.5">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/>
+                </svg>
+            </div>
+            <span class="sidebar-brand-text">Tech<span>Forge</span></span>
+            <span class="sidebar-admin-badge">Admin</span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="sidebar-section-label">Overview</div>
+            <a th:href="@{/admin}" class="sidebar-nav-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/>
+                </svg>Dashboard
+            </a>
+            <div class="sidebar-section-label">Catalogue</div>
+            <a th:href="@{/admin/products}" class="sidebar-nav-item active">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/>
+                    <line x1="3" y1="6" x2="21" y2="6"/>
+                    <path d="M16 10a4 4 0 0 1-8 0"/>
+                </svg>Products
+            </a>
+            <a th:href="@{/admin/categories}" class="sidebar-nav-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/>
+                    <line x1="8" y1="18" x2="21" y2="18"/>
+                </svg>Categories
+            </a>
+            <div class="sidebar-section-label">Sales</div>
+            <a th:href="@{/admin/orders}" class="sidebar-nav-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>Orders
+                <span class="sidebar-nav-badge">12</span>
+            </a>
+            <a th:href="@{/admin/payments}" class="sidebar-nav-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="1" y="4" width="22" height="16" rx="2" ry="2"/>
+                    <line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>Payments
+            </a>
+            <div class="sidebar-section-label">System</div>
+            <a th:href="@{/admin/settings}" class="sidebar-nav-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                </svg>Settings
+            </a>
+            <a th:href="@{/}" class="sidebar-nav-item">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>View Storefront
+            </a>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="sidebar-user">
+                <div class="sidebar-user-avatar">A</div>
+                <div>
+                    <div class="sidebar-user-name">Admin User</div>
+                    <div class="sidebar-user-role">Super Administrator</div>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- ══════════ MAIN ══════════ -->
+    <div class="admin-main">
+        <div class="admin-topbar">
+            <span class="admin-topbar-title">Products</span>
+            <nav style="font-size:0.82rem;color:var(--white-dim);margin-left:8px;">
+                / <a th:href="@{/admin}" style="color:var(--cyan);">Dashboard</a> / Products
+            </nav>
+            <div class="admin-topbar-actions">
+                <a th:href="@{/admin/products/export}" class="btn btn-ghost btn-sm">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Export CSV
+                </a>
+                <a th:href="@{/admin/products/new}" class="btn btn-primary btn-sm">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
+                         stroke="currentColor" stroke-width="2.5">
+                        <line x1="12" y1="5" x2="12" y2="19"/>
+                        <line x1="5" y1="12" x2="19" y2="12"/>
+                    </svg>
+                    Add Product
+                </a>
+            </div>
+        </div>
+
+        <div class="admin-content">
+
+            <!-- Flash messages -->
+            <div th:if="${successMessage}"
+                 style="background:rgba(0,229,160,0.1);border:1px solid rgba(0,229,160,0.4);
+                  border-radius:6px;padding:12px 16px;font-size:0.88rem;color:#00e5a0;
+                  margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+                     stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                <span th:text="${successMessage}">Product saved.</span>
+            </div>
+
+            <!-- Filters bar -->
+            <div style="display:flex;gap:12px;flex-wrap:wrap;margin-bottom:20px;align-items:center;">
+                <div class="filter-chips">
+                    <button class="filter-chip active"
+                            onclick="filterProducts(this,'all')">All (1,284)</button>
+                    <button class="filter-chip"
+                            onclick="filterProducts(this,'active')">Active (1,201)</button>
+                    <button class="filter-chip"
+                            onclick="filterProducts(this,'draft')">Draft (49)</button>
+                    <button class="filter-chip"
+                            onclick="filterProducts(this,'low')">Low Stock (34)</button>
+                    <button class="filter-chip"
+                            onclick="filterProducts(this,'archived')">Archived (0)</button>
+                </div>
+                <div style="margin-left:auto;display:flex;gap:10px;">
+                    <select class="sort-select" style="font-size:0.83rem;">
+                        <option>Category: All</option>
+                        <option>Laptops</option>
+                        <option>Smartphones</option>
+                        <option>Audio</option>
+                        <option>Gaming</option>
+                        <option>Accessories</option>
+                    </select>
+                    <select class="sort-select" style="font-size:0.83rem;">
+                        <option>Sort: Newest</option>
+                        <option>Name A–Z</option>
+                        <option>Price ↑</option>
+                        <option>Price ↓</option>
+                        <option>Stock ↑</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Products table -->
+            <div class="data-card">
+                <div class="data-card-header">
+                    <span class="data-card-title">All Products</span>
+                    <div class="data-search">
+                        <svg class="data-search-icon" width="14" height="14" viewBox="0 0 24 24"
+                             fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                        </svg>
+                        <input type="search" placeholder="Search by name, SKU, brand..."
+                               id="productSearch" oninput="searchProducts(this.value)"/>
+                    </div>
+                    <!-- Bulk actions (shown when rows selected) -->
+                    <div id="bulkActions" style="display:none;gap:8px;">
+            <span id="selectedCount" style="font-size:0.83rem;color:var(--white-dim);">
+              0 selected
+            </span>
+                        <button class="btn btn-ghost btn-sm">Set Active</button>
+                        <button class="btn btn-ghost btn-sm">Set Draft</button>
+                        <button class="btn btn-danger btn-sm">Delete</button>
+                    </div>
+                </div>
+
+                <div style="overflow-x:auto;">
+                    <table class="data-table" id="productsTable">
+                        <thead>
+                        <tr>
+                            <th style="width:40px;">
+                                <input type="checkbox" id="selectAll"
+                                       style="accent-color:var(--cyan);width:14px;height:14px;"
+                                       onchange="toggleSelectAll(this)"/>
+                            </th>
+                            <th>Product</th>
+                            <th>SKU</th>
+                            <th>Category</th>
+                            <th>Price</th>
+                            <th>Stock</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <!--/* Thymeleaf loop — uncomment when backend ready:
+                        <tr th:each="product : ${products}">
+                          <td><input type="checkbox" class="row-check"
+                                     th:value="${product.id}"
+                                     style="accent-color:var(--cyan);width:14px;height:14px;"
+                                     onchange="updateBulkBar()"/></td>
+                          <td>
+                            <div class="product-info">
+                              <div class="product-thumb">
+                                <img th:src="${product.imageUrl}" th:alt="${product.name}"/>
+                              </div>
+                              <div>
+                                <div class="product-title" th:text="${product.name}">Name</div>
+                                <div class="product-sku" th:text="${product.brand}">Brand</div>
+                              </div>
+                            </div>
+                          </td>
+                          <td style="color:var(--white-dim);font-size:0.8rem;"
+                              th:text="${product.sku}">SKU</td>
+                          <td><span class="tag" th:text="${product.category}">Cat</span></td>
+                          <td style="font-weight:600;"
+                              th:text="'$' + ${product.price}">$0</td>
+                          <td>
+                            <span th:class="${product.stock < 10} ? 'status status-pending' : 'status status-active'"
+                                  th:text="${product.stock} + ' units'">50 units</span>
+                          </td>
+                          <td>
+                            <span th:class="'status status-' + ${product.status.toLowerCase()}"
+                                  th:text="${product.status}">Active</span>
+                          </td>
+                          <td>
+                            <div class="table-actions">
+                              <a th:href="@{/admin/products/{id}/edit(id=${product.id})}"
+                                 class="btn btn-ghost btn-sm">Edit</a>
+                              <form th:action="@{/admin/products/{id}/delete(id=${product.id})}"
+                                    method="post" style="display:inline;"
+                                    onsubmit="return confirm('Delete this product?');">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                              </form>
+                            </div>
+                          </td>
+                        </tr>
+                        */-->
+
+                        <!-- Static demo rows -->
+                        <tr>
+                            <td><input type="checkbox" class="row-check" value="1"
+                                       style="accent-color:var(--cyan);width:14px;height:14px;"
+                                       onchange="updateBulkBar()"/></td>
+                            <td>
+                                <div class="product-info">
+                                    <div class="product-thumb">
+                                        <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=80&q=60"
+                                             th:src="@{/images/products/macbook-thumb.jpg}" alt="MacBook"/>
+                                    </div>
+                                    <div>
+                                        <div class="product-title">MacBook Pro 14" M3 Pro</div>
+                                        <div class="product-sku">Apple</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="color:var(--white-dim);font-size:0.8rem;">MBP-M3-14-SB</td>
+                            <td><span class="tag">Laptops</span></td>
+                            <td style="font-weight:600;">$1,999.00</td>
+                            <td><span class="status status-active">48 units</span></td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <a th:href="@{/admin/products/1/edit}" class="btn btn-ghost btn-sm">Edit</a>
+                                    <button class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete(1,'MacBook Pro 14&quot; M3 Pro')">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox" class="row-check" value="2"
+                                       style="accent-color:var(--cyan);width:14px;height:14px;"
+                                       onchange="updateBulkBar()"/></td>
+                            <td>
+                                <div class="product-info">
+                                    <div class="product-thumb">
+                                        <img src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=80&q=60"
+                                             th:src="@{/images/products/iphone-thumb.jpg}" alt="iPhone"/>
+                                    </div>
+                                    <div>
+                                        <div class="product-title">iPhone 15 Pro Max 256GB</div>
+                                        <div class="product-sku">Apple</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="color:var(--white-dim);font-size:0.8rem;">APL-IP15PM-256</td>
+                            <td><span class="tag">Smartphones</span></td>
+                            <td style="font-weight:600;">$1,019.00</td>
+                            <td><span class="status status-pending">7 units</span></td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <a th:href="@{/admin/products/2/edit}" class="btn btn-ghost btn-sm">Edit</a>
+                                    <button class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete(2,'iPhone 15 Pro Max')">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox" class="row-check" value="3"
+                                       style="accent-color:var(--cyan);width:14px;height:14px;"
+                                       onchange="updateBulkBar()"/></td>
+                            <td>
+                                <div class="product-info">
+                                    <div class="product-thumb">
+                                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=80&q=60"
+                                             th:src="@{/images/products/headphones-thumb.jpg}" alt="Sony"/>
+                                    </div>
+                                    <div>
+                                        <div class="product-title">Sony WH-1000XM5</div>
+                                        <div class="product-sku">Sony</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="color:var(--white-dim);font-size:0.8rem;">SNY-XM5-BLK</td>
+                            <td><span class="tag">Audio</span></td>
+                            <td style="font-weight:600;">$349.00</td>
+                            <td><span class="status status-active">122 units</span></td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <a th:href="@{/admin/products/3/edit}" class="btn btn-ghost btn-sm">Edit</a>
+                                    <button class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete(3,'Sony WH-1000XM5')">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox" class="row-check" value="4"
+                                       style="accent-color:var(--cyan);width:14px;height:14px;"
+                                       onchange="updateBulkBar()"/></td>
+                            <td>
+                                <div class="product-info">
+                                    <div class="product-thumb">
+                                        <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=80&q=60"
+                                             th:src="@{/images/products/dell-thumb.jpg}" alt="Dell XPS"/>
+                                    </div>
+                                    <div>
+                                        <div class="product-title">Dell XPS 15 OLED RTX 4060</div>
+                                        <div class="product-sku">Dell</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="color:var(--white-dim);font-size:0.8rem;">DEL-XPS15-4060</td>
+                            <td><span class="tag">Laptops</span></td>
+                            <td style="font-weight:600;">$1,599.00</td>
+                            <td><span class="status status-active">31 units</span></td>
+                            <td><span class="status status-draft">Draft</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <a th:href="@{/admin/products/4/edit}" class="btn btn-ghost btn-sm">Edit</a>
+                                    <button class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete(4,'Dell XPS 15')">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <td><input type="checkbox" class="row-check" value="5"
+                                       style="accent-color:var(--cyan);width:14px;height:14px;"
+                                       onchange="updateBulkBar()"/></td>
+                            <td>
+                                <div class="product-info">
+                                    <div class="product-thumb">
+                                        <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=80&q=60"
+                                             th:src="@{/images/products/monitor-thumb.jpg}" alt="LG Monitor"/>
+                                    </div>
+                                    <div>
+                                        <div class="product-title">LG 34" UltraWide IPS 144Hz</div>
+                                        <div class="product-sku">LG</div>
+                                    </div>
+                                </div>
+                            </td>
+                            <td style="color:var(--white-dim);font-size:0.8rem;">LG-34UW-144</td>
+                            <td><span class="tag">Monitors</span></td>
+                            <td style="font-weight:600;">$799.00</td>
+                            <td><span class="status status-pending">4 units</span></td>
+                            <td><span class="status status-active">Active</span></td>
+                            <td>
+                                <div class="table-actions">
+                                    <a th:href="@{/admin/products/5/edit}" class="btn btn-ghost btn-sm">Edit</a>
+                                    <button class="btn btn-danger btn-sm"
+                                            onclick="confirmDelete(5,'LG UltraWide')">Delete</button>
+                                </div>
+                            </td>
+                        </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-pagination">
+                    <span class="table-pagination-info">Showing 5 of 1,284 products</span>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                        <select class="sort-select" style="font-size:0.8rem;padding:6px 32px 6px 10px;">
+                            <option>10 / page</option>
+                            <option>25 / page</option>
+                            <option>50 / page</option>
+                        </select>
+                        <div class="table-pagination-pages">
+                            <button class="page-btn active">1</button>
+                            <button class="page-btn">2</button>
+                            <button class="page-btn">3</button>
+                            <span style="color:var(--white-dim);padding:0 4px;">…</span>
+                            <button class="page-btn">129</button>
+                            <button class="page-btn">›</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /.admin-content -->
+    </div><!-- /.admin-main -->
+</div><!-- /.admin-layout -->
+
+<!-- Delete confirm modal -->
+<div id="deleteModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.7);
+     z-index:999;align-items:center;justify-content:center;">
+    <div style="background:var(--panel);border:1px solid var(--border);border-radius:12px;
+              padding:32px;max-width:400px;width:90%;text-align:center;">
+        <div style="width:52px;height:52px;background:rgba(255,68,102,0.1);border-radius:50%;
+                display:flex;align-items:center;justify-content:center;margin:0 auto 16px;
+                color:var(--red);font-size:1.4rem;">⚠</div>
+        <h3 style="font-family:var(--font-display);font-size:1.2rem;font-weight:700;margin-bottom:8px;">
+            Delete Product?
+        </h3>
+        <p id="deleteModalMsg" style="color:var(--white-dim);font-size:0.9rem;margin-bottom:24px;">
+            This action cannot be undone.
+        </p>
+        <div style="display:flex;gap:12px;justify-content:center;">
+            <button class="btn btn-ghost" onclick="closeDeleteModal()">Cancel</button>
+            <form id="deleteForm" method="post">
+                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                <button type="submit" class="btn btn-danger">Yes, Delete</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Select all checkbox
+    function toggleSelectAll(master) {
+        document.querySelectorAll('.row-check').forEach(cb => cb.checked = master.checked);
+        updateBulkBar();
+    }
+    function updateBulkBar() {
+        const checked = document.querySelectorAll('.row-check:checked').length;
+        const bar = document.getElementById('bulkActions');
+        bar.style.display = checked > 0 ? 'flex' : 'none';
+        document.getElementById('selectedCount').textContent = checked + ' selected';
+    }
+
+    // Filter chips
+    function filterProducts(btn, filter) {
+        document.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+        btn.classList.add('active');
+        // TODO: navigate to /admin/products?status=filter or AJAX filter
+    }
+
+    // Search
+    function searchProducts(query) {
+        const rows = document.querySelectorAll('#productsTable tbody tr');
+        rows.forEach(row => {
+            const text = row.textContent.toLowerCase();
+            row.style.display = text.includes(query.toLowerCase()) ? '' : 'none';
+        });
+    }
+
+    // Delete modal
+    function confirmDelete(id, name) {
+        document.getElementById('deleteModalMsg').textContent =
+            'Are you sure you want to delete "' + name + '"? This cannot be undone.';
+        document.getElementById('deleteForm').action = '/admin/products/' + id + '/delete';
+        const modal = document.getElementById('deleteModal');
+        modal.style.display = 'flex';
+    }
+    function closeDeleteModal() {
+        document.getElementById('deleteModal').style.display = 'none';
+    }
+    // Close on backdrop click
+    document.getElementById('deleteModal').addEventListener('click', function(e) {
+        if (e.target === this) closeDeleteModal();
+    });
+</script>
+</body>
+</html>
