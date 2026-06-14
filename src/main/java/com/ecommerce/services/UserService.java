@@ -4,6 +4,7 @@ import com.ecommerce.dto.UserDto;
 import com.ecommerce.entities.User;
 import com.ecommerce.repositories.UserRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
@@ -14,6 +15,8 @@ import java.util.logging.Logger;
 public class UserService {
     UserRepository userRepository;
     Logger logger = Logger.getLogger(UserService.class.getName());
+    BCryptPasswordEncoder passwordEncoder;
+
 
 
     public UserService(UserRepository userRepository) {
@@ -25,9 +28,9 @@ public class UserService {
         logger.info("New User object created");
         user.setUsername(userDto.getUsername());
         user.setEmail(userDto.getEmail());
-        user.setPassword(userDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         user.setAddress(userDto.getPassword());
-        user.setRole(userDto.getRole());
+        user.setRole("USER");
         logger.info("User object populated with data from UserDto");
         userRepository.save(user);
     }

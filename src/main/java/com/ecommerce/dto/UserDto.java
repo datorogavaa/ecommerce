@@ -21,6 +21,5 @@ public class UserDto {
     @NotEmpty(message = "Address cannot be empty")
     private String address;
 
-
     private String role;
 }

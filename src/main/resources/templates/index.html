@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -62,16 +63,23 @@
                     <span class="badge" th:text="${cartCount} ?: 0">3</span>
                 </a>
 
-                <!-- Authenticated user dropdown or login button -->
+                <!-- Authenticated user OR login -->
                 <th:block th:if="${user != null}">
-                    <a th:href="@{/account}" class="nav-action-btn" title="Account">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
-                    </a>
+                    <div class="nav-profile">
+                        <a th:href="@{/account}" class="nav-profile-btn" title="Profile">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                 stroke="currentColor" stroke-width="2">
+                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
+                                <circle cx="12" cy="7" r="4"/>
+                            </svg>
+
+                            <span class="nav-profile-name"
+                                  th:text="${user.username}">Profile</span>
+                        </a>
+                    </div>
+
                 </th:block>
+
                 <th:block th:unless="${user != null}">
                     <a th:href="@{/login}" class="nav-login-btn">
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
@@ -584,7 +592,7 @@
                     <a th:href="@{/press}">Press Kit</a>
                     <a th:href="@{/blog}">Blog</a>
                     <a th:href="@{/affiliates}">Affiliates</a>
-                    <a th:href="@{/admin}">Admin Portal</a>
+                    <a th:href="@{/admin/dashboard}">Admin Portal</a>
                 </nav>
             </div>
         </div>

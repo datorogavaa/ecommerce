@@ -1,15 +1,17 @@
 package com.ecommerce.controller;
 
+import com.ecommerce.CustomUserDetails;
 import com.ecommerce.dto.LoginForm;
 import com.ecommerce.dto.RegisterForm;
-import org.springframework.stereotype.Controller;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-@Controller
-public class HomeController {
+@org.springframework.stereotype.Controller
+public class Controller {
     @GetMapping("/")
-    public String home() {
+    public String home(@AuthenticationPrincipal CustomUserDetails user, Model model) {
+        model.addAttribute("user", user);
         return "index";
     }
     @GetMapping("/login")
