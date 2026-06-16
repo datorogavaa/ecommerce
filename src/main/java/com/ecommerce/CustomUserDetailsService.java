@@ -37,6 +37,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                 user.getFirstName(),
                 user.getLastName(),
                 user.getAddress(),
+                user.getPhoneNumber(),
                 user.getEmail()
         );
     }

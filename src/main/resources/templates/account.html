@@ -1,254 +1,18 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>My Account — TechForge</title>
     <link rel="stylesheet" th:href="@{/css/styles.css}"/>
-    <style>
-        /* ── Account layout ── */
-        .account-page { padding: 56px 0 80px; }
-        .account-layout {
-            display: grid;
-            grid-template-columns: 280px 1fr;
-            gap: 28px;
-            align-items: start;
-        }
-        /* Sidebar */
-        .account-sidebar {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-            position: sticky;
-            top: 90px;
-        }
-        .account-profile-card {
-            padding: 28px 24px;
-            border-bottom: 1px solid var(--border);
-            text-align: center;
-        }
-        .account-avatar {
-            width: 72px; height: 72px;
-            background: linear-gradient(135deg, var(--cyan), var(--cyan-dim));
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            font-family: var(--font-display);
-            font-size: 1.6rem; font-weight: 800;
-            color: var(--navy);
-            margin: 0 auto 14px;
-            position: relative;
-        }
-        .avatar-edit-btn {
-            position: absolute; bottom: 0; right: 0;
-            width: 24px; height: 24px;
-            background: var(--navy-light);
-            border: 2px solid var(--border);
-            border-radius: 50%;
-            display: flex; align-items: center; justify-content: center;
-            cursor: pointer; transition: var(--transition);
-            color: var(--white-dim); font-size: 0.6rem;
-        }
-        .avatar-edit-btn:hover { border-color: var(--cyan); color: var(--cyan); }
-        .account-name {
-            font-family: var(--font-display);
-            font-size: 1.05rem; font-weight: 700;
-            margin-bottom: 4px;
-        }
-        .account-email { font-size: 0.83rem; color: var(--white-dim); margin-bottom: 12px; }
-        .account-member-since { font-size: 0.75rem; color: var(--white-dim); opacity: 0.7; }
-        /* Account nav */
-        .account-nav { padding: 12px 8px; }
-        .account-nav-item {
-            display: flex; align-items: center; gap: 10px;
-            padding: 10px 14px;
-            border-radius: var(--radius);
-            color: var(--white-dim);
-            font-size: 0.88rem; font-weight: 500;
-            cursor: pointer; transition: var(--transition);
-            margin-bottom: 2px;
-        }
-        .account-nav-item:hover { color: var(--white); background: var(--navy-light); }
-        .account-nav-item.active {
-            color: var(--cyan); background: var(--cyan-glow);
-            border-left: 3px solid var(--cyan);
-            margin-left: -3px; padding-left: 17px;
-        }
-        .account-nav-section {
-            font-size: 0.65rem; font-weight: 700;
-            letter-spacing: 0.12em; text-transform: uppercase;
-            color: var(--white-dim); opacity: 0.5;
-            padding: 10px 14px 4px;
-            margin-top: 4px;
-        }
-        /* Points widget */
-        .points-widget {
-            margin: 0 12px 12px;
-            background: linear-gradient(135deg, rgba(0,212,255,0.1) 0%, rgba(0,153,187,0.05) 100%);
-            border: 1px solid rgba(0,212,255,0.25);
-            border-radius: var(--radius);
-            padding: 14px 16px;
-        }
-        .points-label { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.08em;
-            text-transform: uppercase; color: var(--cyan); margin-bottom: 4px; }
-        .points-value { font-family: var(--font-display); font-size: 1.6rem; font-weight: 800; color: var(--white); }
-        .points-sub { font-size: 0.75rem; color: var(--white-dim); margin-top: 2px; }
-        /* Main panel */
-        .account-panel { display: flex; flex-direction: column; gap: 24px; }
-        .account-section {
-            background: var(--panel);
-            border: 1px solid var(--border);
-            border-radius: var(--radius-lg);
-            overflow: hidden;
-        }
-        .account-section-header {
-            padding: 18px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex; align-items: center; justify-content: space-between;
-        }
-        .account-section-title {
-            font-family: var(--font-display);
-            font-size: 1rem; font-weight: 700;
-            display: flex; align-items: center; gap: 8px;
-        }
-        .account-section-body { padding: 24px; }
-        /* Order row */
-        .order-row {
-            display: flex; align-items: center; gap: 16px;
-            padding: 16px;
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            margin-bottom: 12px;
-            transition: var(--transition);
-            cursor: pointer;
-        }
-        .order-row:hover { border-color: rgba(0,212,255,0.3); }
-        .order-row:last-child { margin-bottom: 0; }
-        .order-row-thumb {
-            width: 56px; height: 56px;
-            background: var(--navy-light);
-            border-radius: var(--radius);
-            overflow: hidden; flex-shrink: 0;
-        }
-        .order-row-thumb img { width: 100%; height: 100%; object-fit: cover; }
-        .order-row-info { flex: 1; }
-        .order-row-id {
-            font-family: var(--font-display);
-            font-size: 0.82rem; color: var(--cyan); margin-bottom: 3px;
-        }
-        .order-row-name { font-weight: 600; font-size: 0.92rem; margin-bottom: 3px; }
-        .order-row-date { font-size: 0.78rem; color: var(--white-dim); }
-        .order-row-right { text-align: right; flex-shrink: 0; }
-        .order-row-total { font-family: var(--font-display); font-weight: 800; font-size: 1rem; }
-        .order-row-action { font-size: 0.8rem; color: var(--cyan); margin-top: 4px; cursor: pointer; }
-        /* Address card */
-        .address-card {
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            padding: 16px;
-            position: relative;
-            transition: var(--transition);
-        }
-        .address-card:hover { border-color: rgba(0,212,255,0.3); }
-        .address-card.default { border-color: var(--cyan); }
-        .address-card-badge {
-            position: absolute; top: 10px; right: 10px;
-        }
-        .address-name { font-weight: 600; font-size: 0.9rem; margin-bottom: 6px; }
-        .address-lines { font-size: 0.85rem; color: var(--white-dim); line-height: 1.6; }
-        .address-actions {
-            display: flex; gap: 8px; margin-top: 12px;
-            padding-top: 12px; border-top: 1px solid var(--border);
-        }
-        .addresses-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-        }
-        /* Wishlist grid */
-        .wishlist-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-            gap: 16px;
-        }
-        .wishlist-item {
-            background: var(--navy-light);
-            border: 1px solid var(--border);
-            border-radius: var(--radius);
-            overflow: hidden;
-            transition: var(--transition);
-        }
-        .wishlist-item:hover { border-color: rgba(0,212,255,0.4); }
-        .wishlist-img {
-            aspect-ratio: 1;
-            overflow: hidden;
-        }
-        .wishlist-img img { width: 100%; height: 100%; object-fit: cover; }
-        .wishlist-info { padding: 10px; }
-        .wishlist-name { font-size: 0.83rem; font-weight: 600; margin-bottom: 4px;
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .wishlist-price { font-size: 0.8rem; color: var(--cyan); font-weight: 700; }
-        .wishlist-actions { display: flex; gap: 6px; margin-top: 8px; }
-        /* Notification toggles */
-        .notif-row {
-            display: flex; align-items: flex-start; justify-content: space-between; gap: 24px;
-            padding: 14px 0;
-            border-bottom: 1px solid var(--border);
-        }
-        .notif-row:last-child { border-bottom: none; }
-        .notif-label { font-weight: 500; font-size: 0.9rem; margin-bottom: 3px; }
-        .notif-desc { font-size: 0.8rem; color: var(--white-dim); }
-        /* Toggle switch */
-        .toggle {
-            position: relative; width: 44px; height: 24px;
-            flex-shrink: 0; cursor: pointer;
-        }
-        .toggle input { opacity: 0; width: 0; height: 0; }
-        .toggle-slider {
-            position: absolute; inset: 0;
-            background: var(--border);
-            border-radius: 24px;
-            transition: var(--transition);
-        }
-        .toggle-slider::before {
-            content: '';
-            position: absolute; left: 3px; top: 3px;
-            width: 18px; height: 18px;
-            background: var(--white-dim);
-            border-radius: 50%;
-            transition: var(--transition);
-        }
-        .toggle input:checked + .toggle-slider { background: var(--cyan); }
-        .toggle input:checked + .toggle-slider::before {
-            transform: translateX(20px);
-            background: var(--navy);
-        }
-        /* Danger zone */
-        .danger-zone {
-            border: 1px solid rgba(255,68,102,0.3);
-            border-radius: var(--radius);
-            padding: 18px;
-            display: flex; align-items: center; justify-content: space-between; gap: 24px;
-        }
-        .danger-title { font-weight: 600; color: var(--red); margin-bottom: 4px; font-size: 0.92rem; }
-        .danger-desc { font-size: 0.83rem; color: var(--white-dim); }
-
-        @media (max-width: 900px) {
-            .account-layout { grid-template-columns: 1fr; }
-            .account-sidebar { position: static; }
-        }
-        @media (max-width: 560px) {
-            .addresses-grid { grid-template-columns: 1fr; }
-        }
-    </style>
 </head>
 <body>
 
-<!-- ══════════════════ NAVBAR ══════════════════ -->
 <header>
     <nav class="navbar">
         <div class="navbar-inner">
-            <a th:href="@{/}" class="nav-logo">
+            <a th:href="@{/}" href="/" class="nav-logo">
                 <div class="nav-logo-mark">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="2.5">
@@ -257,24 +21,31 @@
                 </div>
                 <span class="nav-logo-text">Tech<span>Forge</span></span>
             </a>
+
             <div class="nav-search">
                 <svg class="nav-search-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2">
-                    <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    <circle cx="11" cy="11" r="8"/>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
                 </svg>
                 <input type="search" placeholder="Search products..."/>
             </div>
+
             <div class="nav-actions">
-                <a th:href="@{/cart}" class="nav-action-btn" title="Cart">
+                <a th:href="@{/cart}" href="/cart" class="nav-action-btn" title="Cart">
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                          stroke="currentColor" stroke-width="2">
-                        <circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/>
+                        <circle cx="9" cy="21" r="1"/>
+                        <circle cx="20" cy="21" r="1"/>
                         <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/>
                     </svg>
-                    <span class="badge" th:text="${cartCount} ?: 0">2</span>
+                    <span class="badge" th:text="${cartCount} ?: 0">0</span>
                 </a>
-                <form th:action="@{/logout}" method="post" style="display:inline;">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                <form th:action="@{/logout}" action="/logout" method="post" style="display:inline;">
+                    <input type="hidden" th:if="${_csrf != null}"
+                           th:name="${_csrf.parameterName}"
+                           th:value="${_csrf.token}"/>
                     <button type="submit" class="btn btn-ghost btn-sm">Sign Out</button>
                 </form>
             </div>
@@ -282,172 +53,137 @@
     </nav>
 </header>
 
-<!-- ══════════════════ ACCOUNT PAGE ══════════════════ -->
 <main class="account-page">
     <div class="container">
         <h1 class="page-title">My Account</h1>
+
         <nav class="page-breadcrumb">
-            <a th:href="@{/}">Home</a>
+            <a th:href="@{/}" href="/">Home</a>
             <span>›</span>
             <span>Account</span>
         </nav>
 
         <div class="account-layout">
 
-            <!-- ── Sidebar ── -->
             <aside class="account-sidebar">
                 <div class="account-profile-card">
-                    <div class="account-avatar">
-                        <span th:text="${user?.initials} ?: 'AJ'">AJ</span>
-                        <button class="avatar-edit-btn" title="Change photo">✎</button>
-                    </div>
-                    <div class="account-name" th:text="${user?.fullName} ?: 'Alex Johnson'">Alex Johnson</div>
-                    <div class="account-email" th:text="${user?.email} ?: 'alex@example.com'">alex@example.com</div>
-                    <div class="account-member-since">
-                        Member since
-                        <span th:text="${user?.memberSince} ?: 'January 2024'">January 2024</span>
-                    </div>
-                </div>
 
-                <!-- TechPoints widget -->
-                <div class="points-widget">
-                    <div class="points-label">TechPoints</div>
-                    <div class="points-value" th:text="${user?.points} ?: '2,840'">2,840 pts</div>
-                    <div class="points-sub">≈ $28.40 in rewards · Tier: Gold</div>
+                    <div class="account-avatar">
+                        <span th:text="${user.firstName != null and !#strings.isEmpty(user.firstName)
+                                ? #strings.substring(user.firstName, 0, 1)
+                                : #strings.substring(user.username, 0, 1)}">
+                            U
+                        </span>
+                    </div>
+
+                    <div class="account-name"
+                         th:text="${user.firstName + ' ' + user.lastName}">
+                        User Name
+                    </div>
+
+                    <div class="account-email"
+                         th:text="${user.email}">
+                        user@example.com
+                    </div>
+
+                    <div class="account-member-since">
+                        Logged in as
+                        <span th:text="${user.username}">username</span>
+                    </div>
+
                 </div>
 
                 <nav class="account-nav">
                     <div class="account-nav-section">Account</div>
+
                     <a href="#profile" class="account-nav-item active" onclick="showSection('profile',this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2">
-                            <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                            <circle cx="12" cy="7" r="4"/>
-                        </svg>
                         Profile
                     </a>
+
                     <a href="#orders" class="account-nav-item" onclick="showSection('orders',this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2">
-                            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                            <polyline points="14 2 14 8 20 8"/>
-                        </svg>
                         Orders
-                        <span style="margin-left:auto;background:var(--cyan);color:var(--navy);
-                         font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:999px;">
-              5
-            </span>
                     </a>
+
                     <a href="#wishlist" class="account-nav-item" onclick="showSection('wishlist',this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2">
-                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                        </svg>
                         Wishlist
                     </a>
+
                     <a href="#addresses" class="account-nav-item" onclick="showSection('addresses',this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2">
-                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                            <circle cx="12" cy="10" r="3"/>
-                        </svg>
-                        Addresses
+                        Address
                     </a>
+
                     <div class="account-nav-section">Settings</div>
+
                     <a href="#security" class="account-nav-item" onclick="showSection('security',this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2">
-                            <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                            <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                        </svg>
                         Security
                     </a>
+
                     <a href="#notifications" class="account-nav-item" onclick="showSection('notifications',this)">
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                             stroke="currentColor" stroke-width="2">
-                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                        </svg>
                         Notifications
                     </a>
                 </nav>
             </aside>
 
-            <!-- ── Main panels ── -->
             <div class="account-panel">
 
-                <!-- ════ PROFILE ════ -->
                 <div class="account-section" id="section-profile">
                     <div class="account-section-header">
-                        <div class="account-section-title">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                 stroke="var(--cyan)" stroke-width="2">
-                                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-                                <circle cx="12" cy="7" r="4"/>
-                            </svg>
-                            Personal Information
-                        </div>
+                        <div class="account-section-title">Personal Information</div>
                     </div>
+
                     <div class="account-section-body">
-                        <form th:action="@{/account/profile}" th:object="${profileForm}"
-                              method="post" style="display:flex;flex-direction:column;gap:18px;">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <form th:action="@{/account/profile}" action="/account/profile" method="post"
+                              style="display:flex;flex-direction:column;gap:18px;">
+
+                            <input type="hidden" th:if="${_csrf != null}"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}"/>
 
                             <div class="form-row">
                                 <div class="form-group">
                                     <label class="form-label">First Name</label>
-                                    <input th:field="*{firstName}" type="text" class="form-input"
-                                           placeholder="First name" th:value="${user?.firstName} ?: 'Alex'"/>
+                                    <input name="firstName"
+                                           type="text"
+                                           class="form-input"
+                                           th:value="${user.firstName}"
+                                           placeholder="First name"/>
                                 </div>
+
                                 <div class="form-group">
                                     <label class="form-label">Last Name</label>
-                                    <input th:field="*{lastName}" type="text" class="form-input"
-                                           placeholder="Last name" th:value="${user?.lastName} ?: 'Johnson'"/>
+                                    <input name="lastName"
+                                           type="text"
+                                           class="form-input"
+                                           th:value="${user.lastName}"
+                                           placeholder="Last name"/>
                                 </div>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Email Address</label>
-                                <div class="input-group">
-                                    <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                         stroke="currentColor" stroke-width="2">
-                                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                                        <polyline points="22,6 12,13 2,6"/>
-                                    </svg>
-                                    <input th:field="*{email}" type="email" class="form-input"
-                                           th:value="${user?.email} ?: 'alex@example.com'"/>
-                                </div>
+                                <input name="email"
+                                       type="email"
+                                       class="form-input"
+                                       th:value="${user.email}"
+                                       placeholder="Email"/>
                             </div>
 
                             <div class="form-group">
                                 <label class="form-label">Phone Number</label>
-                                <div class="input-group">
-                                    <svg class="input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                         stroke="currentColor" stroke-width="2">
-                                        <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 12 19.79 19.79 0 0 1 1.61 3.38 2 2 0 0 1 3.6 1.18h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 8.77a16 16 0 0 0 6.29 6.29l.95-.95a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7a2 2 0 0 1 1.72 2z"/>
-                                    </svg>
-                                    <input th:field="*{phone}" type="tel" class="form-input"
-                                           placeholder="+1 (555) 000-0000"
-                                           th:value="${user?.phone}"/>
-                                </div>
+                                <input name="phoneNumber"
+                                       type="tel"
+                                       class="form-input"
+                                       th:value="${user.phoneNumber}"
+                                       placeholder="Phone"/>
                             </div>
 
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label class="form-label">Date of Birth</label>
-                                    <input th:field="*{dob}" type="date" class="form-input"
-                                           th:value="${user?.dob}"/>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Gender</label>
-                                    <select th:field="*{gender}" class="form-select">
-                                        <option value="">Prefer not to say</option>
-                                        <option value="M">Male</option>
-                                        <option value="F">Female</option>
-                                        <option value="NB">Non-binary</option>
-                                        <option value="OTHER">Other</option>
-                                    </select>
-                                </div>
+                            <div class="form-group">
+                                <label class="form-label">Address</label>
+                                <input name="address"
+                                       type="text"
+                                       class="form-input"
+                                       th:value="${user.address}"
+                                       placeholder="Address"/>
                             </div>
 
                             <div style="display:flex;gap:12px;padding-top:4px;">
@@ -458,159 +194,84 @@
                     </div>
                 </div>
 
-                <!-- ════ ORDERS ════ -->
                 <div class="account-section" id="section-orders" style="display:none;">
                     <div class="account-section-header">
-                        <div class="account-section-title">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                 stroke="var(--cyan)" stroke-width="2">
-                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                                <polyline points="14 2 14 8 20 8"/>
-                            </svg>
-                            Order History
-                        </div>
-                        <select class="sort-select" style="font-size:0.82rem;">
-                            <option>All Orders</option>
-                            <option>Delivered</option>
-                            <option>In Transit</option>
-                            <option>Pending</option>
-                            <option>Cancelled</option>
-                        </select>
+                        <div class="account-section-title">Order History</div>
                     </div>
+
                     <div class="account-section-body">
+                        <div th:if="${userOrders == null or #lists.isEmpty(userOrders)}" class="cart-empty">
+                            <h2 class="cart-empty-title">No orders yet</h2>
+                            <p class="cart-empty-sub">Your orders will appear here.</p>
+                            <a th:href="@{/products}" href="/products" class="btn btn-primary">Browse Products</a>
+                        </div>
 
-                        <!--/* th:each loop:
-                        <div th:each="order : ${userOrders}" class="order-row"
+                        <div th:if="${userOrders != null}"
+                             th:each="order : ${userOrders}"
+                             class="order-row"
                              th:onclick="|window.location='@{/account/orders/{id}(id=${order.id})}'|">
-                          ...
-                        </div>
-                        */-->
 
-                        <div class="order-row">
-                            <div class="order-row-thumb">
-                                <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=120&q=60"
-                                     th:src="@{/images/products/macbook-thumb.jpg}" alt="MacBook"/>
-                            </div>
                             <div class="order-row-info">
-                                <div class="order-row-id">Order #10089 · 2 items</div>
-                                <div class="order-row-name">MacBook Pro M3 + AirPods Pro</div>
-                                <div class="order-row-date">Placed Jun 03, 2025</div>
+                                <div class="order-row-id"
+                                     th:text="'Order #' + ${order.id}">
+                                    Order #1
+                                </div>
+
+                                <div class="order-row-name"
+                                     th:text="${order.status}">
+                                    Pending
+                                </div>
+
+                                <div class="order-row-date"
+                                     th:text="${order.createdAt}">
+                                    Date
+                                </div>
                             </div>
+
                             <div class="order-row-right">
-                                <div class="order-row-total">$2,248.00</div>
-                                <span class="status status-pending" style="margin-top:6px;display:inline-flex;">Pending</span>
-                                <div class="order-row-action">Track order →</div>
+                                <div class="order-row-total"
+                                     th:text="'$' + ${order.total}">
+                                    $0.00
+                                </div>
+                                <div class="order-row-action">View order →</div>
                             </div>
                         </div>
-
-                        <div class="order-row">
-                            <div class="order-row-thumb">
-                                <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=120&q=60"
-                                     th:src="@{/images/products/headphones-thumb.jpg}" alt="Sony"/>
-                            </div>
-                            <div class="order-row-info">
-                                <div class="order-row-id">Order #10055 · 1 item</div>
-                                <div class="order-row-name">Sony WH-1000XM5 Wireless</div>
-                                <div class="order-row-date">Placed May 18, 2025</div>
-                            </div>
-                            <div class="order-row-right">
-                                <div class="order-row-total">$349.00</div>
-                                <span class="status status-active" style="margin-top:6px;display:inline-flex;">Delivered</span>
-                                <div class="order-row-action">Buy again →</div>
-                            </div>
-                        </div>
-
-                        <div class="order-row">
-                            <div class="order-row-thumb">
-                                <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=120&q=60"
-                                     th:src="@{/images/products/monitor-thumb.jpg}" alt="Monitor"/>
-                            </div>
-                            <div class="order-row-info">
-                                <div class="order-row-id">Order #10030 · 1 item</div>
-                                <div class="order-row-name">LG 34" UltraWide IPS 144Hz</div>
-                                <div class="order-row-date">Placed Apr 10, 2025</div>
-                            </div>
-                            <div class="order-row-right">
-                                <div class="order-row-total">$799.00</div>
-                                <span class="status status-active" style="margin-top:6px;display:inline-flex;">Delivered</span>
-                                <div class="order-row-action">Write a review →</div>
-                            </div>
-                        </div>
-
                     </div>
                 </div>
 
-                <!-- ════ WISHLIST ════ -->
                 <div class="account-section" id="section-wishlist" style="display:none;">
                     <div class="account-section-header">
-                        <div class="account-section-title">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                 stroke="var(--cyan)" stroke-width="2">
-                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
-                            </svg>
-                            Saved Items
-                        </div>
-                        <span style="font-size:0.83rem;color:var(--white-dim);">4 items</span>
+                        <div class="account-section-title">Saved Items</div>
                     </div>
+
                     <div class="account-section-body">
-                        <div class="wishlist-grid">
-                            <div class="wishlist-item">
+                        <div th:if="${wishlistItems == null or #lists.isEmpty(wishlistItems)}" class="cart-empty">
+                            <h2 class="cart-empty-title">Wishlist is empty</h2>
+                            <p class="cart-empty-sub">Saved products will appear here.</p>
+                        </div>
+
+                        <div class="wishlist-grid" th:if="${wishlistItems != null}">
+                            <div th:each="item : ${wishlistItems}" class="wishlist-item">
                                 <div class="wishlist-img">
-                                    <img src="https://images.unsplash.com/photo-1593640408182-31c228b42c41?w=200&q=60"
-                                         th:src="@{/images/products/rtx-thumb.jpg}" alt="RTX 4090"/>
+                                    <img th:src="${item.product.imageUrl}" alt="Product"/>
                                 </div>
+
                                 <div class="wishlist-info">
-                                    <div class="wishlist-name">NVIDIA RTX 4090</div>
-                                    <div class="wishlist-price">$1,599.00</div>
-                                    <div class="wishlist-actions">
-                                        <a th:href="@{/cart/add(productId=8)}"
-                                           class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">Add</a>
-                                        <button class="btn-icon btn-sm" title="Remove from wishlist">✕</button>
+                                    <div class="wishlist-name"
+                                         th:text="${item.product.name}">
+                                        Product
                                     </div>
-                                </div>
-                            </div>
-                            <div class="wishlist-item">
-                                <div class="wishlist-img">
-                                    <img src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=200&q=60"
-                                         th:src="@{/images/products/iphone-thumb.jpg}" alt="iPhone 15"/>
-                                </div>
-                                <div class="wishlist-info">
-                                    <div class="wishlist-name">iPhone 15 Pro Max</div>
-                                    <div class="wishlist-price">$1,019.00</div>
-                                    <div class="wishlist-actions">
-                                        <a th:href="@{/cart/add(productId=2)}"
-                                           class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">Add</a>
-                                        <button class="btn-icon btn-sm" title="Remove">✕</button>
+
+                                    <div class="wishlist-price"
+                                         th:text="'$' + ${item.product.price}">
+                                        $0.00
                                     </div>
-                                </div>
-                            </div>
-                            <div class="wishlist-item">
-                                <div class="wishlist-img">
-                                    <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=200&q=60"
-                                         th:src="@{/images/products/watch-thumb.jpg}" alt="Galaxy Watch"/>
-                                </div>
-                                <div class="wishlist-info">
-                                    <div class="wishlist-name">Galaxy Watch 6 Pro</div>
-                                    <div class="wishlist-price">$449.00</div>
+
                                     <div class="wishlist-actions">
-                                        <a th:href="@{/cart/add(productId=5)}"
-                                           class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">Add</a>
-                                        <button class="btn-icon btn-sm" title="Remove">✕</button>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="wishlist-item">
-                                <div class="wishlist-img">
-                                    <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=200&q=60"
-                                         th:src="@{/images/products/dell-thumb.jpg}" alt="Dell XPS"/>
-                                </div>
-                                <div class="wishlist-info">
-                                    <div class="wishlist-name">Dell XPS 15 OLED</div>
-                                    <div class="wishlist-price">$1,599.00</div>
-                                    <div class="wishlist-actions">
-                                        <a th:href="@{/cart/add(productId=4)}"
-                                           class="btn btn-primary btn-sm" style="flex:1;justify-content:center;">Add</a>
-                                        <button class="btn-icon btn-sm" title="Remove">✕</button>
+                                        <a th:href="@{/cart/add(productId=${item.product.id})}"
+                                           class="btn btn-primary btn-sm">
+                                            Add
+                                        </a>
                                     </div>
                                 </div>
                             </div>
@@ -618,204 +279,87 @@
                     </div>
                 </div>
 
-                <!-- ════ ADDRESSES ════ -->
                 <div class="account-section" id="section-addresses" style="display:none;">
                     <div class="account-section-header">
-                        <div class="account-section-title">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                 stroke="var(--cyan)" stroke-width="2">
-                                <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/>
-                                <circle cx="12" cy="10" r="3"/>
-                            </svg>
-                            Saved Addresses
-                        </div>
-                        <button class="btn btn-outline btn-sm" onclick="showAddressForm()">
-                            + Add Address
-                        </button>
+                        <div class="account-section-title">Saved Address</div>
                     </div>
+
                     <div class="account-section-body">
                         <div class="addresses-grid">
-                            <div class="address-card default">
-                                <div class="address-card-badge">
-                                    <span class="tag cyan">Default</span>
-                                </div>
-                                <div class="address-name">Alex Johnson</div>
-                                <div class="address-lines">
-                                    123 Silicon Valley Blvd<br/>
-                                    San Francisco, CA 94105<br/>
-                                    United States<br/>
-                                    +1 (415) 555-0192
-                                </div>
-                                <div class="address-actions">
-                                    <button class="btn btn-ghost btn-sm">Edit</button>
-                                    <button class="btn btn-danger btn-sm">Remove</button>
-                                </div>
-                            </div>
+
                             <div class="address-card">
-                                <div class="address-name">Alex Johnson (Work)</div>
-                                <div class="address-lines">
-                                    456 Market Street, Suite 800<br/>
-                                    San Francisco, CA 94105<br/>
-                                    United States<br/>
-                                    +1 (415) 555-0182
+
+                                <div class="address-name"
+                                     th:text="${user.firstName + ' ' + user.lastName}">
+                                    User Name
                                 </div>
-                                <div class="address-actions">
-                                    <button class="btn btn-ghost btn-sm">Edit</button>
-                                    <button class="btn btn-ghost btn-sm">Set Default</button>
-                                    <button class="btn btn-danger btn-sm">Remove</button>
+
+                                <div class="address-lines"
+                                     th:text="${user.address != null and !#strings.isEmpty(user.address)
+                                             ? user.address
+                                             : 'No address provided'}">
+                                    No address provided
                                 </div>
+
                             </div>
+
                         </div>
                     </div>
                 </div>
 
-                <!-- ════ SECURITY ════ -->
                 <div class="account-section" id="section-security" style="display:none;">
                     <div class="account-section-header">
-                        <div class="account-section-title">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                 stroke="var(--cyan)" stroke-width="2">
-                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-                                <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
-                            </svg>
-                            Security Settings
-                        </div>
+                        <div class="account-section-title">Security Settings</div>
                     </div>
-                    <div class="account-section-body" style="display:flex;flex-direction:column;gap:24px;">
 
-                        <!-- Change password -->
-                        <div>
-                            <div style="font-family:var(--font-display);font-weight:700;font-size:0.95rem;
-                          margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-                                Change Password
-                            </div>
-                            <form th:action="@{/account/password}" method="post"
-                                  style="display:flex;flex-direction:column;gap:16px;">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                                <div class="form-group">
-                                    <label class="form-label">Current Password</label>
-                                    <input type="password" name="currentPassword" class="form-input"
-                                           placeholder="Enter current password" autocomplete="current-password"/>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">New Password</label>
-                                    <input type="password" name="newPassword" class="form-input"
-                                           placeholder="Min 8 characters" autocomplete="new-password"/>
-                                </div>
-                                <div class="form-group">
-                                    <label class="form-label">Confirm New Password</label>
-                                    <input type="password" name="confirmPassword" class="form-input"
-                                           placeholder="Repeat new password" autocomplete="new-password"/>
-                                </div>
-                                <div>
-                                    <button type="submit" class="btn btn-primary">Update Password</button>
-                                </div>
-                            </form>
-                        </div>
+                    <div class="account-section-body">
+                        <form th:action="@{/account/password}" action="/account/password" method="post"
+                              style="display:flex;flex-direction:column;gap:16px;">
 
-                        <!-- 2FA -->
-                        <div>
-                            <div style="font-family:var(--font-display);font-weight:700;font-size:0.95rem;
-                          margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-                                Two-Factor Authentication
-                            </div>
-                            <div style="display:flex;align-items:center;justify-content:space-between;
-                          gap:24px;padding:16px;background:var(--navy-light);
-                          border:1px solid var(--border);border-radius:var(--radius);">
-                                <div>
-                                    <div style="font-weight:600;margin-bottom:4px;">Authenticator App</div>
-                                    <div style="font-size:0.83rem;color:var(--white-dim);">
-                                        Use Google Authenticator or similar for extra security.
-                                    </div>
-                                </div>
-                                <button class="btn btn-outline btn-sm">Enable 2FA</button>
-                            </div>
-                        </div>
+                            <input type="hidden" th:if="${_csrf != null}"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}"/>
 
-                        <!-- Sessions -->
-                        <div>
-                            <div style="font-family:var(--font-display);font-weight:700;font-size:0.95rem;
-                          margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);">
-                                Active Sessions
+                            <div class="form-group">
+                                <label class="form-label">Current Password</label>
+                                <input type="password"
+                                       name="currentPassword"
+                                       class="form-input"
+                                       placeholder="Enter current password"/>
                             </div>
-                            <div style="display:flex;flex-direction:column;gap:10px;">
-                                <div style="display:flex;align-items:center;justify-content:space-between;
-                            padding:14px;background:var(--navy-light);border:1px solid var(--border);
-                            border-radius:var(--radius);">
-                                    <div style="display:flex;align-items:center;gap:12px;">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                             stroke="var(--cyan)" stroke-width="2">
-                                            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                                            <line x1="8" y1="21" x2="16" y2="21"/>
-                                            <line x1="12" y1="17" x2="12" y2="21"/>
-                                        </svg>
-                                        <div>
-                                            <div style="font-weight:600;font-size:0.88rem;">MacBook Pro — Chrome</div>
-                                            <div style="font-size:0.77rem;color:var(--cyan);">Current session · San Francisco, CA</div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div style="display:flex;align-items:center;justify-content:space-between;
-                            padding:14px;background:var(--navy-light);border:1px solid var(--border);
-                            border-radius:var(--radius);">
-                                    <div style="display:flex;align-items:center;gap:12px;">
-                                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none"
-                                             stroke="var(--white-dim)" stroke-width="2">
-                                            <rect x="5" y="2" width="14" height="20" rx="2" ry="2"/>
-                                            <line x1="12" y1="18" x2="12.01" y2="18"/>
-                                        </svg>
-                                        <div>
-                                            <div style="font-weight:600;font-size:0.88rem;">iPhone 15 Pro — Safari</div>
-                                            <div style="font-size:0.77rem;color:var(--white-dim);">2 hours ago · San Francisco, CA</div>
-                                        </div>
-                                    </div>
-                                    <button class="btn btn-danger btn-sm">Revoke</button>
-                                </div>
-                            </div>
-                        </div>
 
-                        <!-- Danger zone -->
-                        <div>
-                            <div style="font-family:var(--font-display);font-weight:700;font-size:0.95rem;
-                          color:var(--red);margin-bottom:16px;padding-bottom:12px;
-                          border-bottom:1px solid rgba(255,68,102,0.2);">
-                                Danger Zone
+                            <div class="form-group">
+                                <label class="form-label">New Password</label>
+                                <input type="password"
+                                       name="newPassword"
+                                       class="form-input"
+                                       placeholder="New password"/>
                             </div>
-                            <div class="danger-zone">
-                                <div>
-                                    <div class="danger-title">Delete Account</div>
-                                    <div class="danger-desc">
-                                        Permanently delete your account and all associated data. This cannot be undone.
-                                    </div>
-                                </div>
-                                <button class="btn btn-danger btn-sm"
-                                        onclick="confirmDeleteAccount()">Delete Account</button>
-                            </div>
-                        </div>
 
+                            <div class="form-group">
+                                <label class="form-label">Confirm New Password</label>
+                                <input type="password"
+                                       name="confirmPassword"
+                                       class="form-input"
+                                       placeholder="Confirm password"/>
+                            </div>
+
+                            <button type="submit" class="btn btn-primary">Update Password</button>
+                        </form>
                     </div>
                 </div>
 
-                <!-- ════ NOTIFICATIONS ════ -->
                 <div class="account-section" id="section-notifications" style="display:none;">
                     <div class="account-section-header">
-                        <div class="account-section-title">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none"
-                                 stroke="var(--cyan)" stroke-width="2">
-                                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
-                                <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
-                            </svg>
-                            Notification Preferences
-                        </div>
+                        <div class="account-section-title">Notification Preferences</div>
                     </div>
-                    <div class="account-section-body">
-                        <form th:action="@{/account/notifications}" method="post">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                            <div style="font-size:0.75rem;font-weight:700;letter-spacing:0.1em;
-                          text-transform:uppercase;color:var(--white-dim);margin-bottom:12px;">
-                                Email Notifications
-                            </div>
+                    <div class="account-section-body">
+                        <form th:action="@{/account/notifications}" action="/account/notifications" method="post">
+
+                            <input type="hidden" th:if="${_csrf != null}"
+                                   th:name="${_csrf.parameterName}"
+                                   th:value="${_csrf.token}"/>
 
                             <div class="notif-row">
                                 <div>
@@ -823,64 +367,20 @@
                                     <div class="notif-desc">Confirmation, shipping, and delivery alerts.</div>
                                 </div>
                                 <label class="toggle">
-                                    <input type="checkbox" name="orderUpdates" checked/>
+                                    <input type="checkbox" name="orderUpdates"
+                                           th:checked="${notificationSettings != null and notificationSettings.orderUpdates}"/>
                                     <span class="toggle-slider"></span>
                                 </label>
                             </div>
+
                             <div class="notif-row">
                                 <div>
                                     <div class="notif-label">Deals &amp; promotions</div>
-                                    <div class="notif-desc">Flash sales, discount codes, and special offers.</div>
+                                    <div class="notif-desc">Flash sales and special offers.</div>
                                 </div>
                                 <label class="toggle">
-                                    <input type="checkbox" name="promotions" checked/>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="notif-row">
-                                <div>
-                                    <div class="notif-label">New arrivals</div>
-                                    <div class="notif-desc">Be first to know about new products.</div>
-                                </div>
-                                <label class="toggle">
-                                    <input type="checkbox" name="newArrivals"/>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="notif-row">
-                                <div>
-                                    <div class="notif-label">Price drop alerts</div>
-                                    <div class="notif-desc">Get notified when wishlist items go on sale.</div>
-                                </div>
-                                <label class="toggle">
-                                    <input type="checkbox" name="priceDrops" checked/>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-                            <div class="notif-row">
-                                <div>
-                                    <div class="notif-label">Back in stock</div>
-                                    <div class="notif-desc">Alert when out-of-stock items are available.</div>
-                                </div>
-                                <label class="toggle">
-                                    <input type="checkbox" name="backInStock" checked/>
-                                    <span class="toggle-slider"></span>
-                                </label>
-                            </div>
-
-                            <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--border);
-                          font-size:0.75rem;font-weight:700;letter-spacing:0.1em;
-                          text-transform:uppercase;color:var(--white-dim);margin-bottom:12px;">
-                                Push Notifications
-                            </div>
-
-                            <div class="notif-row">
-                                <div>
-                                    <div class="notif-label">Browser push notifications</div>
-                                    <div class="notif-desc">Receive notifications directly in your browser.</div>
-                                </div>
-                                <label class="toggle">
-                                    <input type="checkbox" name="pushNotifs"/>
+                                    <input type="checkbox" name="promotions"
+                                           th:checked="${notificationSettings != null and notificationSettings.promotions}"/>
                                     <span class="toggle-slider"></span>
                                 </label>
                             </div>
@@ -892,54 +392,48 @@
                     </div>
                 </div>
 
-            </div><!-- /.account-panel -->
-        </div><!-- /.account-layout -->
-    </div><!-- /.container -->
+            </div>
+        </div>
+    </div>
 </main>
 
-<!-- ══════════════════ FOOTER (minimal) ══════════════════ -->
-<footer style="background:var(--panel);border-top:1px solid var(--border);
-               padding:24px;text-align:center;">
+<footer style="background:var(--panel);border-top:1px solid var(--border);padding:24px;text-align:center;">
     <p style="font-size:0.83rem;color:var(--white-dim);">
         © 2025 TechForge ·
-        <a th:href="@{/privacy}" style="color:var(--cyan);">Privacy</a> ·
-        <a th:href="@{/terms}" style="color:var(--cyan);">Terms</a>
+        <a th:href="@{/privacy}" href="/privacy" style="color:var(--cyan);">Privacy</a> ·
+        <a th:href="@{/terms}" href="/terms" style="color:var(--cyan);">Terms</a>
     </p>
 </footer>
 
 <script>
-    // Section navigation
     function showSection(sectionId, navItem) {
-        // Hide all sections
-        document.querySelectorAll('.account-section').forEach(s => s.style.display = 'none');
-        // Show target section
-        const el = document.getElementById('section-' + sectionId);
-        if (el) el.style.display = 'block';
-        // Update nav active state
-        document.querySelectorAll('.account-nav-item').forEach(a => a.classList.remove('active'));
-        if (navItem) navItem.classList.add('active');
+        document.querySelectorAll('.account-section').forEach(section => {
+            section.style.display = 'none';
+        });
+
+        const section = document.getElementById('section-' + sectionId);
+        if (section) {
+            section.style.display = 'block';
+        }
+
+        document.querySelectorAll('.account-nav-item').forEach(item => {
+            item.classList.remove('active');
+        });
+
+        if (navItem) {
+            navItem.classList.add('active');
+        }
     }
 
-    // Handle URL hash on load
     function loadFromHash() {
         const hash = window.location.hash.replace('#', '') || 'profile';
         const navLink = document.querySelector('.account-nav-item[href="#' + hash + '"]');
         showSection(hash, navLink);
     }
+
     window.addEventListener('load', loadFromHash);
     window.addEventListener('hashchange', loadFromHash);
-
-    // Delete account confirmation
-    function confirmDeleteAccount() {
-        if (confirm('Are you absolutely sure you want to delete your account? This is irreversible.')) {
-            // TODO: POST /account/delete
-            alert('Account deletion request submitted.');
-        }
-    }
-
-    function showAddressForm() {
-        alert('Address form modal — implement with your preferred modal library.');
-    }
 </script>
+
 </body>
 </html>

@@ -24,6 +24,7 @@ public class DataInitializer {
                 admin.setFirstName("System");
                 admin.setLastName("Admin");
                 admin.setAddress("Admin");
+                admin.setPhoneNumber("0000000000");
                 admin.setEmail("admin@system.com");
 
                 userRepository.save(admin);

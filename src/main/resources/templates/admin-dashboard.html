@@ -147,13 +147,16 @@
         </nav>
 
         <div class="sidebar-footer">
-            <div class="sidebar-user">
+            <a th:href="@{/account}" href="/account" class="sidebar-user" style="text-decoration:none;">
                 <div class="sidebar-user-avatar">A</div>
                 <div>
-                    <div class="sidebar-user-name" th:text="${adminUser?.name} ?: 'Admin User'">Admin User</div>
+                    <div class="sidebar-user-name"
+                         th:text="${adminUser?.name} ?: 'Admin User'">
+                        Admin User
+                    </div>
                     <div class="sidebar-user-role">Super Administrator</div>
                 </div>
-            </div>
+            </a>
         </div>
     </aside>
 

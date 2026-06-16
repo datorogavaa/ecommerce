@@ -261,252 +261,43 @@
         <!-- Product grid — th:each ready -->
         <div class="products-grid">
 
-            <!--/* Thymeleaf loop — uncomment when backend is ready:
             <div th:each="product : ${products}" class="product-card">
-              <div class="product-img-wrap">
-                <img th:src="${product.imageUrl}" th:alt="${product.name}"/>
-                <span th:if="${product.isNew}" class="product-badge new">NEW</span>
-                <span th:if="${product.discountPercent > 0}" class="product-badge"
-                      th:text="'-' + ${product.discountPercent} + '%'">-20%</span>
-                <button class="product-wishlist" th:data-id="${product.id}">♡</button>
-              </div>
-              <div class="product-body">
-                <div class="product-category" th:text="${product.category}">Laptops</div>
-                <div class="product-name" th:text="${product.name}">Product Name</div>
-                <div class="product-rating">
-                  <div class="stars">
-                    <span th:each="i : ${#numbers.sequence(1,5)}"
-                          th:class="${i <= product.rating} ? 'star' : 'star empty'">★</span>
-                  </div>
-                  <span class="rating-count" th:text="'(' + ${product.reviewCount} + ')'"></span>
-                </div>
-                <div class="product-footer">
-                  <div class="product-price">
-                    <span class="price-current" th:text="'$' + ${product.price}">$999</span>
-                    <span th:if="${product.originalPrice != null}"
-                          class="price-original" th:text="'$' + ${product.originalPrice}">$1299</span>
-                  </div>
-                  <a th:href="@{/cart/add(productId=${product.id})}" class="product-add-btn">
-                    +
-                  </a>
-                </div>
-              </div>
-            </div>
-            */-->
 
-            <!-- Static demo cards -->
-            <div class="product-card">
                 <div class="product-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&q=80"
-                         th:src="@{/images/products/macbook.jpg}" alt="MacBook Pro M3"/>
-                    <span class="product-badge new">NEW</span>
+                    <img th:if="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+                         th:src="${product.imageUrl.get(0)}"
+                         th:alt="${product.name}"/>
+
                     <button class="product-wishlist">♡</button>
                 </div>
-                <div class="product-body">
-                    <div class="product-category">Laptops</div>
-                    <div class="product-name">MacBook Pro 14" M3 Pro</div>
-                    <div class="product-rating">
-                        <div class="stars">
-                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                            <span class="star">★</span><span class="star">★</span>
-                        </div>
-                        <span class="rating-count">(284)</span>
-                    </div>
-                    <div class="product-footer">
-                        <div class="product-price">
-                            <span class="price-current">$1,999</span>
-                        </div>
-                        <a th:href="@{/cart/add(productId=1)}" class="product-add-btn">+</a>
-                    </div>
-                </div>
-            </div>
 
-            <div class="product-card">
-                <div class="product-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=400&q=80"
-                         th:src="@{/images/products/iphone.jpg}" alt="iPhone 15 Pro"/>
-                    <span class="product-badge">-15%</span>
-                    <button class="product-wishlist">♡</button>
-                </div>
                 <div class="product-body">
-                    <div class="product-category">Smartphones</div>
-                    <div class="product-name">iPhone 15 Pro Max 256GB</div>
+
+                    <div class="product-category" th:text="${product.category}">Category</div>
+
+                    <div class="product-name" th:text="${product.name}">Product Name</div>
+
                     <div class="product-rating">
                         <div class="stars">
                             <span class="star">★</span><span class="star">★</span><span class="star">★</span>
                             <span class="star">★</span><span class="star empty">★</span>
                         </div>
-                        <span class="rating-count">(521)</span>
+                        <span class="rating-count" th:text="'Stock: ' + ${product.quantity}">Stock: 0</span>
                     </div>
+
                     <div class="product-footer">
                         <div class="product-price">
-                            <span class="price-current">$1,019</span>
-                            <span class="price-original">$1,199</span>
+                            <span class="price-current" th:text="'$' + ${product.price}">$0</span>
                         </div>
-                        <a th:href="@{/cart/add(productId=2)}" class="product-add-btn">+</a>
+
+                        <a th:href="@{/cart/add(productId=${product.id})}" class="product-add-btn">+</a>
                     </div>
+
                 </div>
+
             </div>
 
-            <div class="product-card">
-                <div class="product-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&q=80"
-                         th:src="@{/images/products/headphones.jpg}" alt="Sony WH-1000XM5"/>
-                    <button class="product-wishlist">♡</button>
-                </div>
-                <div class="product-body">
-                    <div class="product-category">Audio</div>
-                    <div class="product-name">Sony WH-1000XM5 Wireless</div>
-                    <div class="product-rating">
-                        <div class="stars">
-                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                            <span class="star">★</span><span class="star">★</span>
-                        </div>
-                        <span class="rating-count">(1,047)</span>
-                    </div>
-                    <div class="product-footer">
-                        <div class="product-price">
-                            <span class="price-current">$349</span>
-                            <span class="price-original">$399</span>
-                        </div>
-                        <a th:href="@{/cart/add(productId=3)}" class="product-add-btn">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=400&q=80"
-                         th:src="@{/images/products/laptop2.jpg}" alt="Dell XPS 15"/>
-                    <span class="product-badge">-20%</span>
-                    <button class="product-wishlist">♡</button>
-                </div>
-                <div class="product-body">
-                    <div class="product-category">Laptops</div>
-                    <div class="product-name">Dell XPS 15 OLED RTX 4060</div>
-                    <div class="product-rating">
-                        <div class="stars">
-                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                            <span class="star">★</span><span class="star empty">★</span>
-                        </div>
-                        <span class="rating-count">(339)</span>
-                    </div>
-                    <div class="product-footer">
-                        <div class="product-price">
-                            <span class="price-current">$1,599</span>
-                            <span class="price-original">$1,999</span>
-                        </div>
-                        <a th:href="@{/cart/add(productId=4)}" class="product-add-btn">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1585386959984-a4155224a1ad?w=400&q=80"
-                         th:src="@{/images/products/watch.jpg}" alt="Samsung Galaxy Watch"/>
-                    <span class="product-badge new">NEW</span>
-                    <button class="product-wishlist">♡</button>
-                </div>
-                <div class="product-body">
-                    <div class="product-category">Wearables</div>
-                    <div class="product-name">Samsung Galaxy Watch 6 Pro</div>
-                    <div class="product-rating">
-                        <div class="stars">
-                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                            <span class="star">★</span><span class="star empty">★</span>
-                        </div>
-                        <span class="rating-count">(176)</span>
-                    </div>
-                    <div class="product-footer">
-                        <div class="product-price">
-                            <span class="price-current">$449</span>
-                        </div>
-                        <a th:href="@{/cart/add(productId=5)}" class="product-add-btn">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=400&q=80"
-                         th:src="@{/images/products/monitor.jpg}" alt="LG UltraWide"/>
-                    <button class="product-wishlist">♡</button>
-                </div>
-                <div class="product-body">
-                    <div class="product-category">Monitors</div>
-                    <div class="product-name">LG 34" UltraWide IPS 144Hz</div>
-                    <div class="product-rating">
-                        <div class="stars">
-                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                            <span class="star">★</span><span class="star">★</span>
-                        </div>
-                        <span class="rating-count">(892)</span>
-                    </div>
-                    <div class="product-footer">
-                        <div class="product-price">
-                            <span class="price-current">$799</span>
-                            <span class="price-original">$999</span>
-                        </div>
-                        <a th:href="@{/cart/add(productId=6)}" class="product-add-btn">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?w=400&q=80"
-                         th:src="@{/images/products/airpods.jpg}" alt="AirPods Pro"/>
-                    <span class="product-badge">-10%</span>
-                    <button class="product-wishlist">♡</button>
-                </div>
-                <div class="product-body">
-                    <div class="product-category">Audio</div>
-                    <div class="product-name">Apple AirPods Pro 2nd Gen</div>
-                    <div class="product-rating">
-                        <div class="stars">
-                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                            <span class="star">★</span><span class="star">★</span>
-                        </div>
-                        <span class="rating-count">(2,113)</span>
-                    </div>
-                    <div class="product-footer">
-                        <div class="product-price">
-                            <span class="price-current">$224</span>
-                            <span class="price-original">$249</span>
-                        </div>
-                        <a th:href="@{/cart/add(productId=7)}" class="product-add-btn">+</a>
-                    </div>
-                </div>
-            </div>
-
-            <div class="product-card">
-                <div class="product-img-wrap">
-                    <img src="https://images.unsplash.com/photo-1593640408182-31c228b42c41?w=400&q=80"
-                         th:src="@{/images/products/rtx.jpg}" alt="RTX 4090"/>
-                    <span class="product-badge new">NEW</span>
-                    <button class="product-wishlist">♡</button>
-                </div>
-                <div class="product-body">
-                    <div class="product-category">Gaming</div>
-                    <div class="product-name">NVIDIA RTX 4090 24GB GDDR6X</div>
-                    <div class="product-rating">
-                        <div class="stars">
-                            <span class="star">★</span><span class="star">★</span><span class="star">★</span>
-                            <span class="star">★</span><span class="star">★</span>
-                        </div>
-                        <span class="rating-count">(408)</span>
-                    </div>
-                    <div class="product-footer">
-                        <div class="product-price">
-                            <span class="price-current">$1,599</span>
-                        </div>
-                        <a th:href="@{/cart/add(productId=8)}" class="product-add-btn">+</a>
-                    </div>
-                </div>
-            </div>
-
-        </div><!-- /.products-grid -->
+        </div>
 
         <!-- Pagination -->
         <nav class="pagination" aria-label="Products pagination">

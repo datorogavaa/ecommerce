@@ -9,6 +9,10 @@ public class UserDto {
 
 
     private Long id;
+    @NotEmpty(message = "First name cannot be empty")
+    private String firstName;
+    @NotEmpty(message = "Last name cannot be empty")
+    private String lastName;
 
     @NotEmpty(message = "Username cannot be empty")
     private String username;
@@ -20,6 +24,9 @@ public class UserDto {
 
     @NotEmpty(message = "Address cannot be empty")
     private String address;
+
+    @NotEmpty(message = "Phone number cannot be empty")
+    private String phoneNumber;
 
     private String role;
 }

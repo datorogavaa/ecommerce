@@ -13,6 +13,7 @@ public class CustomUserDetails extends User {
     private final String lastName;
     private final String email;
     private final String address;
+    private final String phoneNumber;
 
     public CustomUserDetails(
             String username,
@@ -21,6 +22,7 @@ public class CustomUserDetails extends User {
             String firstName,
             String lastName,
             String address,
+            String phoneNumber,
             String email
     ) {
         super(username, password, authorities);
@@ -28,5 +30,6 @@ public class CustomUserDetails extends User {
         this.lastName = lastName;
         this.email = email;
         this.address = address;
+        this.phoneNumber = phoneNumber;
     }
 }

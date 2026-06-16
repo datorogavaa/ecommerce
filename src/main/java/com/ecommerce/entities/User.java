@@ -32,6 +32,8 @@ public class User {
 
     private String address;
 
+    private String phoneNumber;
+
     @OneToMany(mappedBy = "user")
     private List<Order> orders;
 

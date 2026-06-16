@@ -88,7 +88,7 @@
         <div class="admin-topbar">
             <span class="admin-topbar-title">Products</span>
             <nav style="font-size:0.82rem;color:var(--white-dim);margin-left:8px;">
-                / <a th:href="@{/admin}" style="color:var(--cyan);">Dashboard</a> / Products
+                / <a th:href="@{/admin/dashboard}" style="color:var(--cyan);">Dashboard</a> / Products
             </nav>
             <div class="admin-topbar-actions">
                 <a th:href="@{/admin/products/export}" class="btn btn-ghost btn-sm">
@@ -201,200 +201,102 @@
                         </thead>
                         <tbody>
 
-                        <!--/* Thymeleaf loop — uncomment when backend ready:
                         <tr th:each="product : ${products}">
-                          <td><input type="checkbox" class="row-check"
-                                     th:value="${product.id}"
-                                     style="accent-color:var(--cyan);width:14px;height:14px;"
-                                     onchange="updateBulkBar()"/></td>
-                          <td>
-                            <div class="product-info">
-                              <div class="product-thumb">
-                                <img th:src="${product.imageUrl}" th:alt="${product.name}"/>
-                              </div>
-                              <div>
-                                <div class="product-title" th:text="${product.name}">Name</div>
-                                <div class="product-sku" th:text="${product.brand}">Brand</div>
-                              </div>
-                            </div>
-                          </td>
-                          <td style="color:var(--white-dim);font-size:0.8rem;"
-                              th:text="${product.sku}">SKU</td>
-                          <td><span class="tag" th:text="${product.category}">Cat</span></td>
-                          <td style="font-weight:600;"
-                              th:text="'$' + ${product.price}">$0</td>
-                          <td>
-                            <span th:class="${product.stock < 10} ? 'status status-pending' : 'status status-active'"
-                                  th:text="${product.stock} + ' units'">50 units</span>
-                          </td>
-                          <td>
-                            <span th:class="'status status-' + ${product.status.toLowerCase()}"
-                                  th:text="${product.status}">Active</span>
-                          </td>
-                          <td>
-                            <div class="table-actions">
-                              <a th:href="@{/admin/products/{id}/edit(id=${product.id})}"
-                                 class="btn btn-ghost btn-sm">Edit</a>
-                              <form th:action="@{/admin/products/{id}/delete(id=${product.id})}"
-                                    method="post" style="display:inline;"
-                                    onsubmit="return confirm('Delete this product?');">
-                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                              </form>
-                            </div>
-                          </td>
-                        </tr>
-                        */-->
 
-                        <!-- Static demo rows -->
-                        <tr>
-                            <td><input type="checkbox" class="row-check" value="1"
+                            <td>
+                                <input type="checkbox"
+                                       class="row-check"
+                                       th:value="${product.id}"
                                        style="accent-color:var(--cyan);width:14px;height:14px;"
-                                       onchange="updateBulkBar()"/></td>
+                                       onchange="updateBulkBar()"/>
+                            </td>
+
                             <td>
                                 <div class="product-info">
-                                    <div class="product-thumb">
-                                        <img src="https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=80&q=60"
-                                             th:src="@{/images/products/macbook-thumb.jpg}" alt="MacBook"/>
-                                    </div>
-                                    <div>
-                                        <div class="product-title">MacBook Pro 14" M3 Pro</div>
-                                        <div class="product-sku">Apple</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="color:var(--white-dim);font-size:0.8rem;">MBP-M3-14-SB</td>
-                            <td><span class="tag">Laptops</span></td>
-                            <td style="font-weight:600;">$1,999.00</td>
-                            <td><span class="status status-active">48 units</span></td>
-                            <td><span class="status status-active">Active</span></td>
-                            <td>
-                                <div class="table-actions">
-                                    <a th:href="@{/admin/products/1/edit}" class="btn btn-ghost btn-sm">Edit</a>
-                                    <button class="btn btn-danger btn-sm"
-                                            onclick="confirmDelete(1,'MacBook Pro 14&quot; M3 Pro')">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
 
-                        <tr>
-                            <td><input type="checkbox" class="row-check" value="2"
-                                       style="accent-color:var(--cyan);width:14px;height:14px;"
-                                       onchange="updateBulkBar()"/></td>
-                            <td>
-                                <div class="product-info">
                                     <div class="product-thumb">
-                                        <img src="https://images.unsplash.com/photo-1606220588913-b3aacb4d2f46?w=80&q=60"
-                                             th:src="@{/images/products/iphone-thumb.jpg}" alt="iPhone"/>
-                                    </div>
-                                    <div>
-                                        <div class="product-title">iPhone 15 Pro Max 256GB</div>
-                                        <div class="product-sku">Apple</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="color:var(--white-dim);font-size:0.8rem;">APL-IP15PM-256</td>
-                            <td><span class="tag">Smartphones</span></td>
-                            <td style="font-weight:600;">$1,019.00</td>
-                            <td><span class="status status-pending">7 units</span></td>
-                            <td><span class="status status-active">Active</span></td>
-                            <td>
-                                <div class="table-actions">
-                                    <a th:href="@{/admin/products/2/edit}" class="btn btn-ghost btn-sm">Edit</a>
-                                    <button class="btn btn-danger btn-sm"
-                                            onclick="confirmDelete(2,'iPhone 15 Pro Max')">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
 
-                        <tr>
-                            <td><input type="checkbox" class="row-check" value="3"
-                                       style="accent-color:var(--cyan);width:14px;height:14px;"
-                                       onchange="updateBulkBar()"/></td>
-                            <td>
-                                <div class="product-info">
-                                    <div class="product-thumb">
-                                        <img src="https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=80&q=60"
-                                             th:src="@{/images/products/headphones-thumb.jpg}" alt="Sony"/>
-                                    </div>
-                                    <div>
-                                        <div class="product-title">Sony WH-1000XM5</div>
-                                        <div class="product-sku">Sony</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="color:var(--white-dim);font-size:0.8rem;">SNY-XM5-BLK</td>
-                            <td><span class="tag">Audio</span></td>
-                            <td style="font-weight:600;">$349.00</td>
-                            <td><span class="status status-active">122 units</span></td>
-                            <td><span class="status status-active">Active</span></td>
-                            <td>
-                                <div class="table-actions">
-                                    <a th:href="@{/admin/products/3/edit}" class="btn btn-ghost btn-sm">Edit</a>
-                                    <button class="btn btn-danger btn-sm"
-                                            onclick="confirmDelete(3,'Sony WH-1000XM5')">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
+                                        <img th:if="${product.imageUrl != null and !product.imageUrl.isEmpty()}"
+                                             th:src="${product.imageUrl.get(0)}"
+                                             th:alt="${product.name}"/>
 
-                        <tr>
-                            <td><input type="checkbox" class="row-check" value="4"
-                                       style="accent-color:var(--cyan);width:14px;height:14px;"
-                                       onchange="updateBulkBar()"/></td>
-                            <td>
-                                <div class="product-info">
-                                    <div class="product-thumb">
-                                        <img src="https://images.unsplash.com/photo-1496181133206-80ce9b88a853?w=80&q=60"
-                                             th:src="@{/images/products/dell-thumb.jpg}" alt="Dell XPS"/>
                                     </div>
-                                    <div>
-                                        <div class="product-title">Dell XPS 15 OLED RTX 4060</div>
-                                        <div class="product-sku">Dell</div>
-                                    </div>
-                                </div>
-                            </td>
-                            <td style="color:var(--white-dim);font-size:0.8rem;">DEL-XPS15-4060</td>
-                            <td><span class="tag">Laptops</span></td>
-                            <td style="font-weight:600;">$1,599.00</td>
-                            <td><span class="status status-active">31 units</span></td>
-                            <td><span class="status status-draft">Draft</span></td>
-                            <td>
-                                <div class="table-actions">
-                                    <a th:href="@{/admin/products/4/edit}" class="btn btn-ghost btn-sm">Edit</a>
-                                    <button class="btn btn-danger btn-sm"
-                                            onclick="confirmDelete(4,'Dell XPS 15')">Delete</button>
-                                </div>
-                            </td>
-                        </tr>
 
-                        <tr>
-                            <td><input type="checkbox" class="row-check" value="5"
-                                       style="accent-color:var(--cyan);width:14px;height:14px;"
-                                       onchange="updateBulkBar()"/></td>
-                            <td>
-                                <div class="product-info">
-                                    <div class="product-thumb">
-                                        <img src="https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?w=80&q=60"
-                                             th:src="@{/images/products/monitor-thumb.jpg}" alt="LG Monitor"/>
-                                    </div>
                                     <div>
-                                        <div class="product-title">LG 34" UltraWide IPS 144Hz</div>
-                                        <div class="product-sku">LG</div>
+
+                                        <div class="product-title"
+                                             th:text="${product.name}">
+                                        </div>
+
+                                        <div class="product-sku"
+                                             th:text="${product.description}">
+                                        </div>
+
                                     </div>
+
                                 </div>
                             </td>
-                            <td style="color:var(--white-dim);font-size:0.8rem;">LG-34UW-144</td>
-                            <td><span class="tag">Monitors</span></td>
-                            <td style="font-weight:600;">$799.00</td>
-                            <td><span class="status status-pending">4 units</span></td>
-                            <td><span class="status status-active">Active</span></td>
+
+                            <td style="color:var(--white-dim);font-size:0.8rem;"
+                                th:text="${product.id}">
+                            </td>
+
                             <td>
-                                <div class="table-actions">
-                                    <a th:href="@{/admin/products/5/edit}" class="btn btn-ghost btn-sm">Edit</a>
-                                    <button class="btn btn-danger btn-sm"
-                                            onclick="confirmDelete(5,'LG UltraWide')">Delete</button>
-                                </div>
+        <span class="tag"
+              th:text="${product.category}">
+        </span>
                             </td>
+
+                            <td style="font-weight:600;"
+                                th:text="'$' + ${product.price}">
+                            </td>
+
+                            <td>
+
+        <span th:class="${product.quantity < 10}
+               ? 'status status-pending'
+               : 'status status-active'"
+
+              th:text="${product.quantity} + ' units'">
+        </span>
+
+                            </td>
+
+                            <td>
+
+        <span th:class="${product.quantity == 0}
+               ? 'status status-draft'
+               : 'status status-active'"
+
+              th:text="${product.quantity == 0}
+               ? 'Out of stock'
+               : 'Active'">
+        </span>
+
+                            </td>
+
+                            <td>
+
+                                <div class="table-actions">
+
+                                    <a th:href="@{/admin/products/{id}/edit(id=${product.id})}"
+                                       class="btn btn-ghost btn-sm">
+
+                                        Edit
+
+                                    </a>
+
+                                    <button type="button"
+                                            class="btn btn-danger btn-sm"
+                                            th:attr="data-id=${product.id}, data-name=${product.name}"
+                                            onclick="confirmDelete(this.dataset.id, this.dataset.name)">
+                                        Delete
+                                    </button>
+
+                                </div>
+
+                            </td>
+
                         </tr>
 
                         </tbody>
